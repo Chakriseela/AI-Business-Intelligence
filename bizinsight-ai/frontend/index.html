@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BizInsight AI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">B</div>
+        <div>
+          <div class="brand-title">BizInsight AI</div>
+          <div class="brand-subtitle">Agentic Business Intelligence</div>
+        </div>
+      </div>
+
+      <button class="new-chat" id="newChatBtn">+ New conversation</button>
+
+      <div class="sidebar-section">
+        <div class="section-label">CONVERSATIONS</div>
+        <div id="conversationList" class="conversation-list">
+          <button class="conversation active">Platinum membership analysis</button>
+          <button class="conversation">August sales summary</button>
+          <button class="conversation">Top revenue products</button>
+        </div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="system-status">
+          <span class="status-dot online"></span>
+          <div>
+            <div class="status-title">Local system</div>
+            <div class="status-text">All services ready</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">MULTI-AGENT WORKSPACE</div>
+          <h1>Business Intelligence Copilot</h1>
+        </div>
+        <div class="topbar-actions">
+          <span class="mode-pill"><span class="status-dot online"></span> Local</span>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <div class="chat-column">
+          <div class="chat-header">
+            <div>
+              <div class="chat-title">Ask BizInsight</div>
+              <div class="chat-subtitle">Ask about sales, customers, products, or company policies.</div>
+            </div>
+          </div>
+
+          <div id="chatMessages" class="chat-messages">
+            <div class="message assistant-message welcome-card">
+              <div class="avatar assistant-avatar">BI</div>
+              <div class="message-body">
+                <div class="message-meta">BizInsight AI</div>
+                <div class="message-text">Ask a business question and watch the agents work through the answer.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="composer-wrap">
+            <div class="suggestions" id="suggestions">
+              <button class="suggestion">What are our total sales?</button>
+              <button class="suggestion">What is our refund policy?</button>
+              <button class="suggestion">Which product generated the highest revenue?</button>
+            </div>
+            <div class="composer">
+              <textarea id="questionInput" rows="2" placeholder="Ask a business question..."></textarea>
+              <button id="sendBtn" class="send-btn">Send <span>↗</span></button>
+            </div>
+            <div class="composer-note">The execution panel shows how LangGraph routes the request through SQL, MCP, RAG, and response generation.</div>
+          </div>
+        </div>
+
+        <aside class="inspector-column">
+          <div class="panel workflow-panel">
+            <div class="panel-header">
+              <div>
+                <div class="panel-kicker">LIVE WORKFLOW</div>
+                <h2>Execution Flow</h2>
+              </div>
+              <span id="routeBadge" class="route-badge neutral">IDLE</span>
+            </div>
+
+            <div class="workflow-graph" id="workflowGraph">
+              <div class="graph-node" data-node="orchestrator">
+                <div class="node-icon">◎</div>
+                <div class="node-copy">
+                  <div class="node-title">Orchestrator</div>
+                  <div class="node-state">Waiting</div>
+                </div>
+              </div>
+
+              <div class="graph-arrow">↓</div>
+
+              <div class="graph-split">
+                <div class="graph-branch">
+                  <div class="graph-node" data-node="sql">
+                    <div class="node-icon">▣</div>
+                    <div class="node-copy">
+                      <div class="node-title">SQL Agent</div>
+                      <div class="node-state">Waiting</div>
+                    </div>
+                  </div>
+                  <div class="graph-arrow">↓</div>
+                  <div class="graph-node compact" data-node="mcp">
+                    <div class="node-icon">⌘</div>
+                    <div class="node-copy">
+                      <div class="node-title">MCP Tool</div>
+                      <div class="node-state">execute_readonly_sql</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="graph-branch">
+                  <div class="graph-node" data-node="rag">
+                    <div class="node-icon">◈</div>
+                    <div class="node-copy">
+                      <div class="node-title">RAG Agent</div>
+                      <div class="node-state">Waiting</div>
+                    </div>
+                  </div>
+                  <div class="graph-arrow">↓</div>
+                  <div class="graph-node compact" data-node="chroma">
+                    <div class="node-icon">◌</div>
+                    <div class="node-copy">
+                      <div class="node-title">ChromaDB</div>
+                      <div class="node-state">Vector retrieval</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="graph-arrow">↓</div>
+
+              <div class="graph-node" data-node="response">
+                <div class="node-icon">✦</div>
+                <div class="node-copy">
+                  <div class="node-title">Response Agent</div>
+                  <div class="node-state">Waiting</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel detail-panel">
+            <div class="panel-header compact-header">
+              <div>
+                <div class="panel-kicker">INSPECTOR</div>
+                <h2>Execution Details</h2>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <div class="detail-title">Generated SQL</div>
+              <pre id="sqlViewer" class="code-viewer">Waiting for SQL agent...</pre>
+            </div>
+
+            <div class="detail-section">
+              <div class="detail-title">MCP Tool</div>
+              <div class="mcp-card">
+                <div class="mcp-row"><span>Tool</span><strong id="mcpTool">-</strong></div>
+                <div class="mcp-row"><span>Status</span><strong id="mcpStatus">-</strong></div>
+                <div class="mcp-row"><span>Rows</span><strong id="mcpRows">-</strong></div>
+              </div>
+            </div>
+
+            <div class="detail-section">
+              <div class="detail-title">Retrieved Sources</div>
+              <div id="sourceList" class="source-list">
+                <div class="empty-state">No documents retrieved yet.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel timeline-panel">
+            <div class="panel-header compact-header">
+              <div>
+                <div class="panel-kicker">TRACE</div>
+                <h2>Activity</h2>
+              </div>
+            </div>
+            <div id="activityLog" class="activity-log">
+              <div class="empty-state">Execution events will appear here.</div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
