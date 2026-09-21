@@ -1,0 +1,136 @@
+/* Add these to the end of your existing src/index.css */
+
+.question-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.prompt-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: #6f7d95;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.model-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.model-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #7e8aa0;
+  font-size: 11px;
+}
+
+.model-selector select {
+  min-width: 220px;
+  padding: 9px 11px;
+  border: 1px solid #242d3d;
+  border-radius: 8px;
+  outline: none;
+  color: #cbd5e4;
+  background: #0e141e;
+  font-size: 11px;
+}
+
+.capability-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px;
+  margin-bottom: 3px;
+  color: #a6b0c2;
+  border-radius: 7px;
+  background: #0f141e;
+  font-size: 10px;
+}
+
+.capability-item span:last-child {
+  color: #566176;
+}
+
+.stack-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.inspector-details,
+.retrieved-knowledge {
+  margin-top: 12px;
+  color: #738096;
+  font-size: 10px;
+}
+
+.inspector-details summary,
+.retrieved-knowledge summary {
+  cursor: pointer;
+  color: #92a2bf;
+}
+
+.inspector-details pre {
+  max-height: 220px;
+  margin-top: 8px;
+  overflow: auto;
+  padding: 10px;
+  color: #8fa1c3;
+  border: 1px solid #1b2432;
+  border-radius: 8px;
+  background: #080d14;
+  font-size: 10px;
+}
+
+.answer-text h1,
+.answer-text h2,
+.answer-text h3 {
+  margin: 0 0 10px;
+  color: #edf2fb;
+}
+
+.answer-text p {
+  margin: 0 0 10px;
+}
+
+.answer-text ul,
+.answer-text ol {
+  margin: 8px 0 12px;
+  padding-left: 22px;
+}
+
+.answer-text code {
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: #131a26;
+  color: #a9b8da;
+}
+
+.answer-text pre {
+  overflow-x: auto;
+  padding: 12px;
+  border: 1px solid #1c2636;
+  border-radius: 8px;
+  background: #080d14;
+}
+
+@media (max-width: 700px) {
+  .question-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .model-selector,
+  .model-selector select,
+  .send-button {
+    width: 100%;
+  }
+}
