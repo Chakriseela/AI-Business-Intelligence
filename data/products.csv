@@ -1,0 +1,51 @@
+product_id,product_name,category,price,cost,stock_quantity
+P001,Wireless Headphones,Electronics,4999,3000,136
+P002,Mechanical Keyboard,Electronics,6999,4200,134
+P003,USB-C Hub,Accessories,2499,1400,32
+P004,Office Chair,Furniture,12999,8000,118
+P005,Smart Watch,Electronics,8999,5200,224
+P006,Laptop Stand,Accessories,1999,1000,188
+P007,Bluetooth Speaker,Electronics,5999,3400,162
+P008,Webcam HD,Electronics,3499,2100,55
+P009,Monitor 24 Inch,Electronics,11999,7500,162
+P010,Monitor 27 Inch,Electronics,17999,11500,199
+P011,Ergonomic Mouse,Accessories,2999,1700,280
+P012,Desk Lamp,Furniture,1799,900,224
+P013,Standing Desk,Furniture,21999,14500,294
+P014,Portable SSD 1TB,Storage,8499,5600,189
+P015,Portable SSD 2TB,Storage,14999,9800,34
+P016,USB Microphone,Audio,7499,4700,79
+P017,Noise Cancelling Earbuds,Audio,6499,3900,153
+P018,Tablet 10 Inch,Electronics,19999,14000,111
+P019,Laptop Backpack,Accessories,3999,2200,155
+P020,Power Bank 20000mAh,Accessories,2499,1500,39
+P021,WiFi Router,Networking,4499,2700,75
+P022,Mesh WiFi 2 Pack,Networking,10999,7200,242
+P023,HDMI Cable,Accessories,799,300,196
+P024,USB-C Cable,Accessories,699,250,180
+P025,Surge Protector,Accessories,1299,650,243
+P026,External HDD 2TB,Storage,6999,4500,281
+P027,External HDD 4TB,Storage,10999,7200,79
+P028,Laser Printer,Office,15999,10800,217
+P029,Wireless Printer,Office,12999,9000,117
+P030,Office Desk,Furniture,14999,9800,150
+P031,Filing Cabinet,Furniture,7999,5200,42
+P032,Projector,Electronics,22999,15500,243
+P033,Projector Screen,Office,8999,5800,20
+P034,Conference Speakerphone,Audio,13999,9100,286
+P035,Smartphone Stand,Accessories,999,400,295
+P036,Phone Charger 30W,Accessories,1599,800,120
+P037,Smart Plug,Smart Home,1299,650,206
+P038,Security Camera,Smart Home,5499,3300,240
+P039,Air Purifier,Smart Home,16999,11800,55
+P040,Coffee Machine,Appliances,18999,12500,189
+P041,Electric Kettle,Appliances,2499,1300,180
+P042,Air Fryer,Appliances,7999,4900,83
+P043,Digital Scale,Appliances,1499,700,173
+P044,Extension Board,Accessories,1099,500,279
+P045,Gaming Chair,Furniture,18999,12400,178
+P046,Gaming Mouse,Gaming,3499,2000,229
+P047,Gaming Keyboard,Gaming,7999,4900,187
+P048,Gaming Headset,Gaming,5499,3300,226
+P049,4K Monitor,Electronics,29999,20500,171
+P050,Smart LED Bulb,Smart Home,899,350,85
