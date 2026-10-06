@@ -1,0 +1,206 @@
+{
+    "evaluation": {
+        "project": "BizInsight AI",
+        "type": "Deterministic RAG Retrieval Evaluation",
+        "k": 3,
+        "timestamp": "20260930_044526"
+    },
+    "summary": {
+        "hit_rate_at_k": 1.0,
+        "precision_at_k": 0.7666666666666666,
+        "recall_at_k": 1.0,
+        "mrr": 1.0
+    },
+    "test_cases": [
+        {
+            "id": "RET-001",
+            "question": "What is the return window for electronics?",
+            "expected_answer": "Electronics can be returned within 15 calendar days, provided they are unused or have a confirmed functional defect.",
+            "expected_document": "refund_policy.pdf",
+            "retrieved_documents": [
+                "refund_policy.pdf",
+                "refund_policy.pdf",
+                "refund_policy.pdf",
+                "warranty_policy.pdf"
+            ],
+            "k": 3,
+            "hit_rate_at_k": 1.0,
+            "precision_at_k": 1.0,
+            "recall_at_k": 1.0,
+            "mrr": 1.0,
+            "retrieved_document_count": 4,
+            "success": true
+        },
+        {
+            "id": "RET-002",
+            "question": "How long are refunds normally processed after a return is accepted?",
+            "expected_answer": "Approved refunds are normally processed within 5-7 business days after the return is accepted.",
+            "expected_document": "refund_policy.pdf",
+            "retrieved_documents": [
+                "refund_policy.pdf",
+                "refund_policy.pdf",
+                "refund_policy.pdf",
+                "shipping_policy.pdf"
+            ],
+            "k": 3,
+            "hit_rate_at_k": 1.0,
+            "precision_at_k": 1.0,
+            "recall_at_k": 1.0,
+            "mrr": 1.0,
+            "retrieved_document_count": 4,
+            "success": true
+        },
+        {
+            "id": "RET-003",
+            "question": "What is the return window for furniture?",
+            "expected_answer": "Furniture has a 10 calendar day return window, and the product should be in its original condition.",
+            "expected_document": "refund_policy.pdf",
+            "retrieved_documents": [
+                "refund_policy.pdf",
+                "refund_policy.pdf",
+                "refund_policy.pdf",
+                "faq.pdf"
+            ],
+            "k": 3,
+            "hit_rate_at_k": 1.0,
+            "precision_at_k": 1.0,
+            "recall_at_k": 1.0,
+            "mrr": 1.0,
+            "retrieved_document_count": 4,
+            "success": true
+        },
+        {
+            "id": "RET-004",
+            "question": "Can a damaged or defective item be replaced?",
+            "expected_answer": "Replacement may be offered when an item is damaged, defective, or incorrectly shipped.",
+            "expected_document": "refund_policy.pdf",
+            "retrieved_documents": [
+                "refund_policy.pdf",
+                "refund_policy.pdf",
+                "refund_policy.pdf",
+                "warranty_policy.pdf"
+            ],
+            "k": 3,
+            "hit_rate_at_k": 1.0,
+            "precision_at_k": 1.0,
+            "recall_at_k": 1.0,
+            "mrr": 1.0,
+            "retrieved_document_count": 4,
+            "success": true
+        },
+        {
+            "id": "WAR-001",
+            "question": "What is the standard warranty period for laptops?",
+            "expected_answer": "Laptops have a standard warranty period of 2 years covering manufacturing defects and covered hardware failures.",
+            "expected_document": "warranty_policy.pdf",
+            "retrieved_documents": [
+                "warranty_policy.pdf",
+                "warranty_policy.pdf",
+                "faq.pdf",
+                "warranty_policy.pdf"
+            ],
+            "k": 3,
+            "hit_rate_at_k": 1.0,
+            "precision_at_k": 0.6666666666666666,
+            "recall_at_k": 1.0,
+            "mrr": 1.0,
+            "retrieved_document_count": 4,
+            "success": true
+        },
+        {
+            "id": "WAR-002",
+            "question": "What is the warranty period for accessories?",
+            "expected_answer": "Accessories have a standard warranty period of 1 year for manufacturing defects.",
+            "expected_document": "warranty_policy.pdf",
+            "retrieved_documents": [
+                "warranty_policy.pdf",
+                "warranty_policy.pdf",
+                "faq.pdf",
+                "warranty_policy.pdf"
+            ],
+            "k": 3,
+            "hit_rate_at_k": 1.0,
+            "precision_at_k": 0.6666666666666666,
+            "recall_at_k": 1.0,
+            "mrr": 1.0,
+            "retrieved_document_count": 4,
+            "success": true
+        },
+        {
+            "id": "WAR-003",
+            "question": "What can exclude warranty coverage?",
+            "expected_answer": "Damage caused by misuse, unauthorized modification, or accidental impact may be excluded from warranty coverage.",
+            "expected_document": "warranty_policy.pdf",
+            "retrieved_documents": [
+                "warranty_policy.pdf",
+                "warranty_policy.pdf",
+                "warranty_policy.pdf",
+                "refund_policy.pdf"
+            ],
+            "k": 3,
+            "hit_rate_at_k": 1.0,
+            "precision_at_k": 1.0,
+            "recall_at_k": 1.0,
+            "mrr": 1.0,
+            "retrieved_document_count": 4,
+            "success": true
+        },
+        {
+            "id": "SAL-001",
+            "question": "What information should sales recommendations not fabricate?",
+            "expected_answer": "Sales recommendations should not fabricate stock levels, discounts, delivery dates, or customer history.",
+            "expected_document": "sales_guidelines.pdf",
+            "retrieved_documents": [
+                "sales_guidelines.pdf",
+                "sales_guidelines.pdf",
+                "employee_handbook.pdf",
+                "sales_guidelines.pdf"
+            ],
+            "k": 3,
+            "hit_rate_at_k": 1.0,
+            "precision_at_k": 0.6666666666666666,
+            "recall_at_k": 1.0,
+            "mrr": 1.0,
+            "retrieved_document_count": 4,
+            "success": true
+        },
+        {
+            "id": "EMP-001",
+            "question": "How many days per week can employees work remotely with manager approval?",
+            "expected_answer": "Employees can work remotely up to 2 days per week with manager approval.",
+            "expected_document": "employee_handbook.pdf",
+            "retrieved_documents": [
+                "employee_handbook.pdf",
+                "faq.pdf",
+                "shipping_policy.pdf",
+                "employee_handbook.pdf"
+            ],
+            "k": 3,
+            "hit_rate_at_k": 1.0,
+            "precision_at_k": 0.3333333333333333,
+            "recall_at_k": 1.0,
+            "mrr": 1.0,
+            "retrieved_document_count": 4,
+            "success": true
+        },
+        {
+            "id": "EMP-002",
+            "question": "How should AI-generated output be treated when a human approval step is required?",
+            "expected_answer": "AI-generated output should be treated as a draft when a human approval step is required.",
+            "expected_document": "employee_handbook.pdf",
+            "retrieved_documents": [
+                "employee_handbook.pdf",
+                "sales_guidelines.pdf",
+                "sales_guidelines.pdf",
+                "escalation_matrix.pdf"
+            ],
+            "k": 3,
+            "hit_rate_at_k": 1.0,
+            "precision_at_k": 0.3333333333333333,
+            "recall_at_k": 1.0,
+            "mrr": 1.0,
+            "retrieved_document_count": 4,
+            "success": true
+        }
+    ]
+}

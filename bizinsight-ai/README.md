@@ -54,9 +54,35 @@ What is the Platinum discount?
 The console should show the most relevant chunks and the source PDF/page metadata.
 
 
+pip install arize-phoenix openinference-instrumentation openinference-instrumentation-langchain
+
+
 
 python -m backend.rag.ingest
 python -m backend.rag.retriever
 python -m backend.mcp_server.server
 python -m backend.mcp_server.client
 python -m backend.agents.sql_agent
+python -m backend.agents.orchestrator
+python -m backend.main
+
+# Evaluations
+python -m backend.evaluation.run_evaluation
+python -m backend.evaluation.ragas_evaluation
+
+
+cd frontend-react
+npm install @xyflow/react
+npm install @xyflow/react lucide-react react-markdown
+
+The App.jsx uses the existing ws://127.0.0.1:8000/ws/chat endpoint and sends question, model_provider, and model_name.
+
+
+
+
+# TO RUN THE APPLICATION
+python -m backend.main  (in root dir)
+cd frontend-react
+npm run dev
+phoenix serve
+python -m backend.evaluation.run_evaluation

@@ -1,0 +1,11 @@
+id,question,expected_document,retrieved_documents,hit_rate_at_k,precision_at_k,recall_at_k,mrr,success,error
+RET-001,What is the return window for electronics?,refund_policy.pdf,refund_policy.pdf | refund_policy.pdf | refund_policy.pdf | warranty_policy.pdf,1.0,0.75,1.0,1.0,True,
+RET-002,How long are refunds normally processed after a return is accepted?,refund_policy.pdf,refund_policy.pdf | refund_policy.pdf | refund_policy.pdf | shipping_policy.pdf,1.0,0.75,1.0,1.0,True,
+RET-003,What is the return window for furniture?,refund_policy.pdf,refund_policy.pdf | refund_policy.pdf | refund_policy.pdf | faq.pdf,1.0,0.75,1.0,1.0,True,
+RET-004,Can a damaged or defective item be replaced?,refund_policy.pdf,refund_policy.pdf | refund_policy.pdf | refund_policy.pdf | warranty_policy.pdf,1.0,0.75,1.0,1.0,True,
+WAR-001,What is the standard warranty period for laptops?,warranty_policy.pdf,warranty_policy.pdf | warranty_policy.pdf | faq.pdf | warranty_policy.pdf,1.0,0.75,1.0,1.0,True,
+WAR-002,What is the warranty period for accessories?,warranty_policy.pdf,warranty_policy.pdf | warranty_policy.pdf | faq.pdf | warranty_policy.pdf,1.0,0.75,1.0,1.0,True,
+WAR-003,What can exclude warranty coverage?,warranty_policy.pdf,warranty_policy.pdf | warranty_policy.pdf | warranty_policy.pdf | refund_policy.pdf,1.0,0.75,1.0,1.0,True,
+SAL-001,What information should sales recommendations not fabricate?,sales_guidelines.pdf,sales_guidelines.pdf | sales_guidelines.pdf | employee_handbook.pdf | sales_guidelines.pdf,1.0,0.75,1.0,1.0,True,
+EMP-001,How many days per week can employees work remotely with manager approval?,employee_handbook.pdf,employee_handbook.pdf | faq.pdf | shipping_policy.pdf | employee_handbook.pdf,1.0,0.5,1.0,1.0,True,
+EMP-002,How should AI-generated output be treated when a human approval step is required?,employee_handbook.pdf,employee_handbook.pdf | sales_guidelines.pdf | sales_guidelines.pdf | escalation_matrix.pdf,1.0,0.25,1.0,1.0,True,

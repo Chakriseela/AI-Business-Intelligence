@@ -6,6 +6,7 @@ import ollama
 
 from google import genai
 from google.genai import types
+from backend.Prompts.generate_sql import get_sql_prompt
 
 from backend.config.settings import (
     GEMINI_API_KEY,
@@ -14,6 +15,7 @@ from backend.config.settings import (
 )
 
 from backend.mcp_server.client import MCPClient
+from backend.observability.phoenix_setup import tracer
 
 
 # =========================================================
@@ -121,57 +123,37 @@ def generate_sql(
     question: str,
     tool_description: str,
     input_schema: dict,
+    model_provider: str,
+    model_name: str,
 ) -> str:
 
-    prompt = f"""
-You are the SQL reasoning agent for BizInsight AI.
+    prompt = get_sql_prompt(tool_description, input_schema, question)
 
-Convert the user's business question into ONE valid
-SQLite SELECT query.
+    # try:
 
-MCP SQL Tool Description:
-{tool_description}
+    #     response = client.models.generate_content(
+    #         model=GEMINI_MODEL,
+    #         contents=prompt,
+    #         # config=GENERATION_CONFIG,
+    #     )
+    #     sql = response.text.strip()
 
-MCP Tool Input Schema:
-{input_schema}
+    # except Exception:
 
-Database guidance:
+    #     response = ollama.chat(
+    #         model=OLLAMA_MODEL,
+    #         messages=[
+    #             {
+    #                 "role": "user",
+    #                 "content": prompt,
+    #             }
+    #         ],
+    #     )
+    #     sql = response["message"]["content"]
 
-- customers = customer information
-- products = product information
-- orders = order-level sales information
-- order_items = products inside each order
-
-Important rules:
-
-- Use only the tables and columns described above.
-- Generate only SELECT.
-- Never generate INSERT, UPDATE, DELETE, DROP,
-  ALTER, CREATE, PRAGMA, ATTACH, or DETACH.
-- Use SQLite syntax.
-- When calculating sales or revenue, normally use
-  completed orders only unless the user explicitly
-  asks for cancelled/all orders.
-- Return ONLY SQL.
-- Do not use markdown.
-
-User Question:
-{question}
-"""
-
-    try:
-
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=prompt,
-            # config=GENERATION_CONFIG,
-        )
-        sql = response.text.strip()
-
-    except Exception:
-
+    if model_provider == "ollama":
         response = ollama.chat(
-            model=OLLAMA_MODEL,
+            model=model_name,
             messages=[
                 {
                     "role": "user",
@@ -179,8 +161,23 @@ User Question:
                 }
             ],
         )
-        sql = response["message"]["content"]
-    
+
+        sql = (
+            response
+            .get("message", {})
+            .get("content", "")
+        )
+    else:
+        response = client.models.generate_content(
+            model=model_name,
+            contents=prompt,
+            config=GENERATION_CONFIG,
+        )
+
+        if isinstance(response, str):
+            sql = response
+        else:
+            sql = response.text or ""
 
 
     sql = sql.replace("```sql", "")
@@ -190,7 +187,7 @@ User Question:
     # Make sure we actually got SQL
     if not sql:
         raise RuntimeError(
-            "Both Gemini and Ollama returned an empty SQL response."
+            f"{model_provider} returned an empty SQL response."
         )
 
     return sql
@@ -201,70 +198,100 @@ User Question:
 # =========================================================
 
 async def sql_agent(
-    question: str
+    question: str,
+    model_provider: str = "gemini",
+    model_name: str = GEMINI_MODEL,
 ) -> dict:
-    """
-    SQL Agent responsibilities:
 
-    1. Discover SQL MCP tool
-    2. Generate SQL using Gemini
-    3. Validate SQL
-    4. Call MCP
-    5. Return database evidence
+    with tracer.start_as_current_span("sql_agent") as span:
+        """
+        SQL Agent responsibilities:
 
-    It does NOT generate the final natural-language answer.
-    """
+        1. Discover SQL MCP tool
+        2. Generate SQL using Gemini
+        3. Validate SQL
+        4. Call MCP
+        5. Return database evidence
 
-    async with MCPClient() as mcp_client:
+        It does NOT generate the final natural-language answer.
+        """
+        span.set_attribute("agent.name", "sql_agent")
+        span.set_attribute("input.question", question)
+        span.set_attribute("llm.provider", model_provider)
+        span.set_attribute("llm.model", model_name)
 
-        # -------------------------------------------------
-        # Discover MCP tools
-        # -------------------------------------------------
+        async with MCPClient() as mcp_client:
+            with tracer.start_as_current_span("mcp.list_tools") as mcp_span:
 
-        tools = await mcp_client.list_tools()
+                # -------------------------------------------------
+                # Discover MCP tools
+                # -------------------------------------------------
 
-        sql_tool = find_sql_tool(tools)
+                tools = await mcp_client.list_tools()
 
-        # -------------------------------------------------
-        # Generate SQL
-        # -------------------------------------------------
+                mcp_span.set_attribute("mcp.tool.count", len(tools))
 
-        generated_sql = generate_sql(
-            question=question,
-            tool_description=sql_tool["description"],
-            input_schema=sql_tool["input_schema"],
-        )
+            sql_tool = find_sql_tool(tools)
 
-        # -------------------------------------------------
-        # Validate SQL
-        # -------------------------------------------------
+            span.set_attribute("mcp.sql_tool.name", sql_tool["name"])
 
-        is_valid, validated_sql = validate_sql(
-            generated_sql
-        )
+            # -------------------------------------------------
+            # Generate SQL
+            # -------------------------------------------------
+            with tracer.start_as_current_span("gemini.sql_generation") as llm_span:
+                generated_sql = generate_sql(
+                    question=question,
+                    tool_description=sql_tool["description"],
+                    input_schema=sql_tool["input_schema"],
+                    model_provider=model_provider,
+                    model_name=model_name,
+                )
 
-        if not is_valid:
+                llm_span.set_attribute("llm.model", model_name)
+                llm_span.set_attribute("sql.generated", generated_sql)
+            
 
-            return {
-                "success": False,
-                "sql": generated_sql,
-                "data": [],
-                "row_count": 0,
-                "mcp_tool": sql_tool["name"],
-                "error": validated_sql,
-            }
+            # -------------------------------------------------
+            # Validate SQL
+            # -------------------------------------------------
 
-        # -------------------------------------------------
-        # Call MCP Tool
-        # -------------------------------------------------
+            with tracer.start_as_current_span("sql.validation") as validation_span:
+                is_valid, validated_sql = validate_sql(
+                    generated_sql
+                )
 
-        tool_result = await mcp_client.call_tool(
-            tool_name=sql_tool["name"],
-            arguments={
-                "query": validated_sql
-            },
-        )
+                validation_span.set_attribute("sql.valid", is_valid)
+                validation_span.set_attribute("sql.validated", validated_sql)
 
+                if not is_valid:
+
+                    return {
+                        "success": False,
+                        "sql": generated_sql,
+                        "data": [],
+                        "row_count": 0,
+                        "mcp_tool": sql_tool["name"],
+                        "error": validated_sql,
+                    }
+
+            # -------------------------------------------------
+            # Call MCP Tool
+            # -------------------------------------------------
+
+            with tracer.start_as_current_span("mcp.call_tool") as mcp_span:
+
+                mcp_span.set_attribute("mcp.tool.name", sql_tool["name"])
+                mcp_span.set_attribute("db.sql", validated_sql)
+
+
+                tool_result = await mcp_client.call_tool(
+                    tool_name=sql_tool["name"],
+                    arguments={
+                        "query": validated_sql
+                    },
+                )
+
+                mcp_span.set_attribute("mcp.error", tool_result.get("is_error", False))
     # -----------------------------------------------------
     # Extract structured result
     # -----------------------------------------------------
@@ -280,9 +307,7 @@ async def sql_agent(
             "content",
             []
         ):
-
             try:
-
                 parsed = json.loads(content)
 
                 if isinstance(parsed, dict):
@@ -309,6 +334,8 @@ async def sql_agent(
             "mcp_tool": sql_tool["name"],
             "error": tool_result,
         }
+
+    span.set_attribute("db.row_count", database_result.get("row_count", 0))
 
     # -----------------------------------------------------
     # Return evidence only

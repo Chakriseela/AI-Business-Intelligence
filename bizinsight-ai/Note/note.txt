@@ -61,6 +61,8 @@ For BOTH:
               Response
 
 
+
+
 🧠 Orchestrator
       ↓
 ┌───────────────┬───────────────┐
@@ -118,7 +120,7 @@ Orchestrator
                            v
                     RESPONSE AGENT
                            |
-                         Gemini
+                    Gemini/Ollama (selected llm_model)
                            |
                            v
                      FINAL ANSWER

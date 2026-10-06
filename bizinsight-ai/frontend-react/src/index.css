@@ -1,0 +1,1419 @@
+:root {
+
+  font-family:
+
+    Inter,
+
+    ui-sans-serif,
+
+    system-ui,
+
+    -apple-system,
+
+    BlinkMacSystemFont,
+
+    "Segoe UI",
+
+    sans-serif;
+ 
+  background: #080b12;
+
+  color: #f4f7fb;
+
+}
+ 
+* {
+
+  box-sizing: border-box;
+
+}
+ 
+body {
+
+  margin: 0;
+
+  background:
+
+    radial-gradient(
+
+      circle at top right,
+
+      rgba(74, 91, 255, 0.12),
+
+      transparent 28%
+
+    ),
+
+    #080b12;
+
+}
+ 
+button,
+
+textarea {
+
+  font: inherit;
+
+}
+ 
+ 
+/* =========================================================
+
+   APP
+
+   ========================================================= */
+ 
+.app {
+
+  display: flex;
+
+  min-height: 100vh;
+
+}
+ 
+ 
+/* =========================================================
+
+   SIDEBAR
+
+   ========================================================= */
+ 
+.sidebar {
+
+  width: 260px;
+
+  min-height: 100vh;
+
+  padding: 24px 18px;
+ 
+  border-right: 1px solid #1b2230;
+ 
+  background: #0b0f17;
+ 
+  display: flex;
+
+  flex-direction: column;
+
+}
+ 
+.brand {
+
+  display: flex;
+
+  gap: 12px;
+
+  align-items: center;
+
+}
+ 
+.brand-icon {
+
+  width: 38px;
+
+  height: 38px;
+ 
+  display: grid;
+
+  place-items: center;
+ 
+  border-radius: 11px;
+ 
+  background: #171f35;
+ 
+  color: #8ea2ff;
+
+}
+ 
+.brand h1 {
+
+  margin: 0;
+
+  font-size: 16px;
+
+}
+ 
+.brand span {
+
+  color: #6f798d;
+
+  font-size: 11px;
+
+}
+ 
+.new-chat {
+
+  margin-top: 28px;
+ 
+  border: 1px solid #29314a;
+
+  border-radius: 10px;
+ 
+  padding: 11px;
+ 
+  color: #e6eaff;
+
+  background: #111728;
+ 
+  cursor: pointer;
+
+}
+ 
+.sidebar-section {
+
+  margin-top: 30px;
+
+}
+ 
+.sidebar-label {
+
+  margin: 0 0 10px;
+ 
+  color: #5f6a7c;
+ 
+  font-size: 10px;
+
+  letter-spacing: 0.12em;
+
+}
+ 
+.history-item {
+
+  padding: 11px;
+ 
+  margin-bottom: 4px;
+ 
+  color: #929bad;
+ 
+  border-radius: 8px;
+ 
+  font-size: 13px;
+
+}
+ 
+.history-item.active {
+
+  color: #f2f4ff;
+
+  background: #131a2b;
+
+}
+ 
+.sidebar-footer {
+
+  margin-top: auto;
+
+}
+ 
+.system-status {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+ 
+  color: #9aa5b8;
+ 
+  font-size: 12px;
+
+}
+ 
+.status-dot {
+
+  width: 7px;
+
+  height: 7px;
+ 
+  border-radius: 50%;
+ 
+  background: #65d39a;
+
+}
+ 
+.stack-label {
+
+  margin-top: 8px;
+ 
+  color: #525d70;
+ 
+  font-size: 10px;
+
+}
+ 
+ 
+/* =========================================================
+
+   MAIN
+
+   ========================================================= */
+ 
+.main {
+
+  flex: 1;
+
+  max-width: 1500px;
+ 
+  margin: 0 auto;
+ 
+  padding: 34px 42px 60px;
+
+}
+ 
+.topbar {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-end;
+
+}
+ 
+.eyebrow {
+
+  color: #7180a0;
+ 
+  font-size: 10px;
+
+  letter-spacing: 0.16em;
+
+}
+ 
+.topbar h2 {
+
+  margin: 6px 0 0;
+ 
+  font-size: 29px;
+
+  letter-spacing: -0.03em;
+
+}
+ 
+.architecture-badge {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+ 
+  padding: 8px 12px;
+ 
+  color: #aab5ff;
+ 
+  border: 1px solid #252e4b;
+
+  border-radius: 999px;
+ 
+  background: #0d1321;
+ 
+  font-size: 11px;
+
+}
+ 
+ 
+/* =========================================================
+
+   QUESTION
+
+   ========================================================= */
+ 
+.question-panel {
+
+  margin-top: 28px;
+
+}
+ 
+.question-box {
+
+  position: relative;
+ 
+  padding: 16px;
+ 
+  border: 1px solid #252d40;
+
+  border-radius: 15px;
+ 
+  background: #0d121c;
+
+}
+ 
+textarea {
+
+  width: 100%;
+ 
+  resize: vertical;
+ 
+  border: 0;
+
+  outline: 0;
+ 
+  color: #edf1fa;
+
+  background: transparent;
+ 
+  font-size: 15px;
+
+}
+ 
+textarea::placeholder {
+
+  color: #5e6778;
+
+}
+ 
+.send-button {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+ 
+  margin-left: auto;
+
+  margin-top: 12px;
+ 
+  border: 0;
+
+  border-radius: 9px;
+ 
+  padding: 10px 14px;
+ 
+  color: white;
+ 
+  background: #4f65ff;
+ 
+  cursor: pointer;
+
+}
+ 
+.send-button:disabled {
+
+  opacity: 0.55;
+
+  cursor: default;
+
+}
+ 
+.example-questions {
+
+  display: flex;
+
+  gap: 8px;
+ 
+  margin-top: 10px;
+
+}
+ 
+.example-questions button {
+
+  padding: 7px 10px;
+ 
+  color: #8290a9;
+ 
+  border: 1px solid #20283a;
+
+  border-radius: 8px;
+ 
+  background: #0d121c;
+ 
+  cursor: pointer;
+ 
+  font-size: 11px;
+
+}
+ 
+ 
+/* =========================================================
+
+   WORKFLOW
+
+   ========================================================= */
+ 
+.workflow-section {
+
+  margin-top: 32px;
+
+}
+ 
+.section-heading {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-end;
+
+}
+ 
+.section-heading span {
+
+  color: #64718a;
+ 
+  font-size: 10px;
+
+  letter-spacing: 0.12em;
+
+}
+ 
+.section-heading h3 {
+
+  margin: 4px 0 0;
+ 
+  font-size: 17px;
+
+}
+ 
+.route-badge {
+
+  padding: 7px 11px;
+ 
+  color: #9da9ff;
+ 
+  border: 1px solid #252e4b;
+
+  border-radius: 8px;
+ 
+  background: #10162a;
+ 
+  font-size: 11px;
+
+}
+ 
+.workflow {
+
+  margin-top: 16px;
+ 
+  padding: 18px;
+ 
+  border: 1px solid #1c2534;
+
+  border-radius: 15px;
+ 
+  background:
+
+    radial-gradient(
+
+      circle at center,
+
+      rgba(80, 99, 255, 0.06),
+
+      transparent 45%
+
+    ),
+
+    #0b1019;
+
+}
+ 
+.workflow-node {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+ 
+  width: 100%;
+ 
+  padding: 13px 15px;
+ 
+  border: 1px solid #222b3a;
+
+  border-radius: 11px;
+ 
+  color: #687387;
+ 
+  background: #0d131d;
+
+}
+ 
+.workflow-node.complete {
+
+  color: #ecf1ff;
+ 
+  border-color: #394675;
+ 
+  box-shadow:
+
+    0 0 0 1px rgba(87, 107, 255, 0.08),
+
+    0 10px 40px rgba(0, 0, 0, 0.16);
+
+}
+ 
+.workflow-node strong {
+
+  display: block;
+ 
+  font-size: 13px;
+
+}
+ 
+.workflow-node span {
+
+  display: block;
+ 
+  margin-top: 2px;
+ 
+  color: #67748a;
+ 
+  font-size: 11px;
+
+}
+ 
+.connector {
+
+  text-align: center;
+ 
+  color: #42506b;
+ 
+  margin: 7px 0;
+
+}
+ 
+.specialists {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+ 
+  gap: 12px;
+
+}
+ 
+ 
+/* =========================================================
+
+   DETAILS
+
+   ========================================================= */
+ 
+.details-grid {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+ 
+  gap: 14px;
+ 
+  margin-top: 18px;
+
+}
+ 
+.detail-card {
+
+  min-height: 180px;
+ 
+  padding: 17px;
+ 
+  border: 1px solid #1d2635;
+
+  border-radius: 14px;
+ 
+  background: #0c111a;
+
+}
+ 
+.card-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+ 
+  color: #c6cfdf;
+ 
+  font-size: 12px;
+
+}
+ 
+.code-panel {
+
+  margin-top: 15px;
+ 
+  min-height: 100px;
+ 
+  padding: 12px;
+ 
+  overflow-x: auto;
+ 
+  color: #95a6ce;
+ 
+  border: 1px solid #1b2432;
+
+  border-radius: 9px;
+ 
+  background: #080d14;
+ 
+  font-family:
+
+    "Cascadia Code",
+
+    Consolas,
+
+    monospace;
+ 
+  font-size: 11px;
+ 
+  white-space: pre-wrap;
+
+}
+ 
+.metric {
+
+  display: flex;
+
+  justify-content: space-between;
+ 
+  margin-top: 11px;
+ 
+  color: #667389;
+ 
+  font-size: 11px;
+
+}
+ 
+.metric strong {
+
+  color: #aeb9cb;
+
+}
+ 
+.mcp-tool {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+ 
+  margin-top: 20px;
+ 
+  padding: 13px;
+ 
+  border-radius: 10px;
+ 
+  background: #101720;
+
+}
+ 
+.tool-status {
+
+  color: #63d39a;
+ 
+  font-size: 10px;
+
+}
+ 
+.mcp-tool strong {
+
+  display: block;
+ 
+  color: #d5def0;
+ 
+  font-size: 12px;
+
+}
+ 
+.mcp-tool span:last-child {
+
+  display: block;
+ 
+  margin-top: 3px;
+ 
+  color: #68758a;
+ 
+  font-size: 10px;
+
+}
+ 
+.sources {
+
+  margin-top: 14px;
+
+}
+ 
+.source-item {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+ 
+  padding: 9px 0;
+ 
+  border-bottom: 1px solid #17202c;
+
+}
+ 
+.source-item strong {
+
+  display: block;
+ 
+  color: #b8c3d5;
+ 
+  font-size: 11px;
+
+}
+ 
+.source-item span {
+
+  display: block;
+ 
+  margin-top: 2px;
+ 
+  color: #59667a;
+ 
+  font-size: 10px;
+
+}
+ 
+.empty-text {
+
+  display: block;
+ 
+  margin-top: 17px;
+ 
+  color: #505d70;
+ 
+  font-size: 11px;
+
+}
+ 
+.timeline {
+
+  margin-top: 14px;
+
+}
+ 
+.timeline-item {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 10px;
+ 
+  padding: 7px 0;
+ 
+  color: #7f8ba0;
+ 
+  font-size: 11px;
+
+}
+ 
+.timeline-dot {
+
+  width: 6px;
+
+  height: 6px;
+ 
+  margin-top: 4px;
+ 
+  flex: 0 0 auto;
+ 
+  border-radius: 50%;
+ 
+  background: #596cff;
+
+}
+ 
+ 
+/* =========================================================
+
+   FINAL ANSWER
+
+   ========================================================= */
+ 
+.answer-panel {
+
+  margin-top: 18px;
+ 
+  border: 1px solid #283252;
+
+  border-radius: 15px;
+ 
+  background:
+
+    linear-gradient(
+
+      135deg,
+
+      rgba(71, 88, 220, 0.08),
+
+      transparent 45%
+
+    ),
+
+    #0c111a;
+
+}
+ 
+.answer-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+ 
+  padding: 15px 17px;
+ 
+  color: #bdc8ff;
+ 
+  border-bottom: 1px solid #1e2840;
+ 
+  font-size: 12px;
+
+}
+ 
+.answer-content {
+
+  padding: 19px;
+
+}
+ 
+.answer-text {
+
+  color: #e4e9f3;
+ 
+  line-height: 1.7;
+ 
+  white-space: pre-wrap;
+ 
+  font-size: 14px;
+
+}
+ 
+.empty-answer,
+
+.loading {
+
+  color: #69758a;
+ 
+  font-size: 13px;
+
+}
+ 
+ 
+/* =========================================================
+
+   RESPONSIVE
+
+   ========================================================= */
+ 
+@media (max-width: 950px) {
+ 
+  .sidebar {
+
+    display: none;
+
+  }
+ 
+  .main {
+
+    padding: 24px 18px 40px;
+
+  }
+ 
+  .details-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+ 
+  .specialists {
+
+    grid-template-columns: 1fr;
+
+  }
+ 
+  .topbar {
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    flex-direction: column;
+
+  }
+
+}
+ 
+.workflow-node.running {
+
+  border-color: #596cff;
+
+  box-shadow:
+
+    0 0 0 1px rgba(89, 108, 255, 0.15),
+
+    0 0 24px rgba(89, 108, 255, 0.08);
+
+}
+ 
+.rag-context-card {
+
+  grid-column: 1 / -1;
+
+  min-height: 220px;
+
+}
+ 
+
+/* =========================================================
+
+   React Flow Workflow
+
+   ========================================================= */
+ 
+.workflow-flow-container {
+
+  height: 760px;
+
+  margin-top: 16px;
+ 
+  overflow: hidden;
+ 
+  border: 1px solid #1c2534;
+
+  border-radius: 15px;
+ 
+  background:
+
+    radial-gradient(
+
+      circle at center,
+
+      rgba(79, 101, 255, 0.05),
+
+      transparent 45%
+
+    ),
+
+    #0a0f17;
+
+}
+ 
+ 
+/* =========================================================
+
+   Custom Workflow Nodes
+
+   ========================================================= */
+ 
+.workflow-flow-node {
+
+  width: 220px;
+
+  min-height: 74px;
+ 
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+ 
+  padding: 12px 13px;
+ 
+  border: 1px solid #252e3d;
+
+  border-radius: 13px;
+ 
+  background: rgba(12, 17, 26, 0.96);
+ 
+  box-shadow:
+
+    0 10px 30px rgba(0, 0, 0, 0.24);
+ 
+  transition:
+
+    border-color 0.25s ease,
+
+    box-shadow 0.25s ease,
+
+    transform 0.25s ease;
+
+}
+ 
+ 
+/* =========================================================
+
+   Node Icon
+
+   ========================================================= */
+ 
+.flow-node-icon {
+
+  width: 34px;
+
+  height: 34px;
+ 
+  flex: 0 0 34px;
+ 
+  display: grid;
+
+  place-items: center;
+ 
+  border-radius: 9px;
+ 
+  color: #7f91ff;
+ 
+  background: #121a2e;
+
+}
+ 
+ 
+.flow-node-content {
+
+  min-width: 0;
+
+}
+ 
+ 
+.flow-node-content strong {
+
+  display: block;
+ 
+  color: #e8edf8;
+ 
+  font-size: 12px;
+
+}
+ 
+ 
+.flow-node-content span {
+
+  display: block;
+ 
+  margin-top: 2px;
+ 
+  color: #758197;
+ 
+  font-size: 10px;
+ 
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+ 
+  max-width: 145px;
+
+}
+ 
+ 
+.flow-node-content small {
+
+  display: block;
+ 
+  margin-top: 4px;
+ 
+  color: #566277;
+ 
+  font-size: 9px;
+ 
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+
+}
+ 
+ 
+/* =========================================================
+
+   Waiting
+
+   ========================================================= */
+ 
+.workflow-flow-node.status-waiting {
+
+  opacity: 0.6;
+
+}
+ 
+ 
+/* =========================================================
+
+   Running
+
+   ========================================================= */
+ 
+.workflow-flow-node.status-running {
+
+  border-color: #596cff;
+ 
+  box-shadow:
+
+    0 0 0 1px rgba(89, 108, 255, 0.16),
+
+    0 0 28px rgba(89, 108, 255, 0.12);
+
+}
+ 
+ 
+/* =========================================================
+
+   Completed
+
+   ========================================================= */
+ 
+.workflow-flow-node.status-completed {
+
+  border-color: #3d4f82;
+ 
+  box-shadow:
+
+    0 0 0 1px rgba(84, 107, 180, 0.08),
+
+    0 12px 34px rgba(0, 0, 0, 0.25);
+
+}
+ 
+ 
+/* =========================================================
+
+   Error
+
+   ========================================================= */
+ 
+.workflow-flow-node.status-error {
+
+  border-color: #74414a;
+
+}
+ 
+ 
+/* =========================================================
+
+   Handles
+
+   ========================================================= */
+ 
+.flow-handle {
+
+  width: 7px !important;
+
+  height: 7px !important;
+ 
+  border: 2px solid #0a0f17 !important;
+ 
+  background: #5768ff !important;
+
+}
+ 
+ 
+/* =========================================================
+
+   Active Edges
+
+   ========================================================= */
+ 
+.flow-edge-active {
+
+  stroke-width: 2.5px;
+
+}
+ 
+ 
+/* =========================================================
+
+   React Flow Controls
+
+   ========================================================= */
+ 
+.workflow-flow-container
+
+.react-flow__controls {
+
+  border: 1px solid #202a3a;
+ 
+  overflow: hidden;
+ 
+  border-radius: 9px;
+
+}
+ 
+ 
+.workflow-flow-container
+
+.react-flow__controls-button {
+
+  width: 30px;
+
+  height: 30px;
+ 
+  border-bottom: 1px solid #202a3a;
+ 
+  background: #0e141e;
+ 
+  color: #8896ad;
+
+}
+ 
+ 
+.workflow-flow-container
+
+.react-flow__controls-button:hover {
+
+  background: #151d2a;
+
+}
+ 
+ 
+/* =========================================================
+
+   React Flow Attribution
+
+   ========================================================= */
+ 
+.workflow-flow-container
+
+.react-flow__attribution {
+
+  display: none;
+
+}
+ 
+
+
+/* Add these to the end of your existing src/index.css */
+
+.question-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.prompt-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: #6f7d95;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.model-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.model-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #7e8aa0;
+  font-size: 11px;
+}
+
+.model-selector select {
+  min-width: 220px;
+  padding: 9px 11px;
+  border: 1px solid #242d3d;
+  border-radius: 8px;
+  outline: none;
+  color: #cbd5e4;
+  background: #0e141e;
+  font-size: 11px;
+}
+
+.capability-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 10px;
+  margin-bottom: 3px;
+  color: #a6b0c2;
+  border-radius: 7px;
+  background: #0f141e;
+  font-size: 10px;
+}
+
+.capability-item span:last-child {
+  color: #566176;
+}
+
+.stack-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.inspector-details,
+.retrieved-knowledge {
+  margin-top: 12px;
+  color: #738096;
+  font-size: 10px;
+}
+
+.inspector-details summary,
+.retrieved-knowledge summary {
+  cursor: pointer;
+  color: #92a2bf;
+}
+
+.inspector-details pre {
+  max-height: 220px;
+  margin-top: 8px;
+  overflow: auto;
+  padding: 10px;
+  color: #8fa1c3;
+  border: 1px solid #1b2432;
+  border-radius: 8px;
+  background: #080d14;
+  font-size: 10px;
+}
+
+.answer-text h1,
+.answer-text h2,
+.answer-text h3 {
+  margin: 0 0 10px;
+  color: #edf2fb;
+}
+
+.answer-text p {
+  margin: 0 0 10px;
+}
+
+.answer-text ul,
+.answer-text ol {
+  margin: 8px 0 12px;
+  padding-left: 22px;
+}
+
+.answer-text code {
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: #131a26;
+  color: #a9b8da;
+}
+
+.answer-text pre {
+  overflow-x: auto;
+  padding: 12px;
+  border: 1px solid #1c2636;
+  border-radius: 8px;
+  background: #080d14;
+}
+
+@media (max-width: 700px) {
+  .question-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .model-selector,
+  .model-selector select,
+  .send-button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@xyflow/react": "^12.11.6",
+    "lucide-react": "^1.47.0",
+    "react-markdown": "^10.1.0"
+  }
+}

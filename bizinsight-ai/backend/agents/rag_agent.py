@@ -1,4 +1,5 @@
 from backend.rag.retriever import retrieve_context
+from backend.observability.phoenix_setup import tracer
 
 
 # =========================================================
@@ -8,43 +9,56 @@ from backend.rag.retriever import retrieve_context
 def rag_agent(
     question: str
 ) -> dict:
-    """
-    RAG Agent responsibilities:
 
-    1. Search ChromaDB
-    2. Retrieve relevant document chunks
-    3. Return evidence + sources
+    with tracer.start_as_current_span("rag_agent") as span:
+        """
+        RAG Agent responsibilities:
 
-    It does NOT generate the final answer.
-    """
+        1. Search ChromaDB
+        2. Retrieve relevant document chunks
+        3. Return evidence + sources
 
-    retrieval_result = retrieve_context(
-        question
-    )
+        It does NOT generate the final answer.
+        """
 
-    context = retrieval_result.get(
-        "context",
-        ""
-    )
+        span.set_attribute("agent.name", "rag_agent")
+        span.set_attribute("input.question", question)
 
-    sources = retrieval_result.get(
-        "sources",
-        []
-    )
+        with tracer.start_as_current_span("chroma.retrieval") as retrieval_span:
 
-    return {
-        "success": bool(
-            context.strip()
-        ),
+            retrieval_result = retrieve_context(
+                question
+            )
 
-        "context": context,
+            context = retrieval_result.get(
+                "context",
+                ""
+            )
 
-        "sources": sources,
+            sources = retrieval_result.get(
+                "sources",
+                []
+            )
 
-        "document_count": len(
-            sources
-        ),
-    }
+            retrieval_span.set_attribute("retrieved.context_length", len(context))
+            retrieval_span.set_attribute("retrieved.document_count", len(sources))
+
+        span.set_attribute("rag.success", bool(context.strip()))
+        span.set_attribute("rag.document_count", len(sources))
+
+        return {
+            "success": bool(
+                context.strip()
+            ),
+
+            "context": context,
+
+            "sources": sources,
+
+            "document_count": len(
+                sources
+            ),
+        }
 
 
 # =========================================================
