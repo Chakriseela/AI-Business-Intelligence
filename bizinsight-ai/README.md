@@ -53,11 +53,11 @@ What is the Platinum discount?
 
 The console should show the most relevant chunks and the source PDF/page metadata.
 
-
+```
 pip install arize-phoenix openinference-instrumentation openinference-instrumentation-langchain
 
 
-```
+
 python -m backend.rag.ingest
 python -m backend.rag.retriever
 python -m backend.mcp_server.server
