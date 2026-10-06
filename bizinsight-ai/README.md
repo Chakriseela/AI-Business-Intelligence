@@ -57,7 +57,7 @@ The console should show the most relevant chunks and the source PDF/page metadat
 pip install arize-phoenix openinference-instrumentation openinference-instrumentation-langchain
 
 
-
+```
 python -m backend.rag.ingest
 python -m backend.rag.retriever
 python -m backend.mcp_server.server
@@ -65,6 +65,7 @@ python -m backend.mcp_server.client
 python -m backend.agents.sql_agent
 python -m backend.agents.orchestrator
 python -m backend.main
+```
 
 # Evaluations
 python -m backend.evaluation.run_evaluation
