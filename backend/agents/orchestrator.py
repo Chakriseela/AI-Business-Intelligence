@@ -10,15 +10,15 @@ from backend.config.settings import (
     GEMINI_MODEL,
     OLLAMA_MODEL
 )
- 
+
 from backend.agents.sql_agent import sql_agent
 from backend.agents.rag_agent import rag_agent
 from backend.agents.response_agent import response_agent
 from backend.LLM_Models.llm_responce_generator import generate_with_selected_model
 from backend.Prompts.agent_decision_prompt import get_orchestrator_prompt
 from backend.observability.phoenix_setup import tracer
- 
- 
+
+
 # =========================================================
 # Gemini Client
 # =========================================================

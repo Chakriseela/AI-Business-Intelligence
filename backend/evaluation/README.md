@@ -254,3 +254,42 @@ Check retrieved context
      ↓
 Wrong context? → Fix retrieval
 Right context? → Fix generation
+
+
+# Phoenix
+Collects:
+- Traces
+- Span hierarchy
+- Latency
+- Token usage
+- Errors
+- Agent execution flow
+
+# DeepEval
+Evaluates:
+- Faithfulness
+- Answer Relevancy
+- Context Precision
+- Context Recall
+- Hallucination
+- Tool Correctness
+- Task Completion
+- Custom business metrics
+
+```
+| Feature | Phoenix | DeepEval |
+|---------|----------|-----------|
+| Open Source | ✅ | ✅ |
+| Local Dashboard | ✅ | ❌ |
+| Localhost UI | ✅ | ❌ |
+| Trace Visualization | ✅ | Basic locally / Full via Confident AI |
+| Evaluation Metrics | Limited | Excellent |
+| RAG Evaluation | Limited | Excellent |
+| Agent Evaluation | Basic | Excellent |
+| Unit Testing | ❌ | ✅ |
+| PyTest Integration | ❌ | ✅ |
+| CI/CD | ❌ | ✅ |
+| Observability | Excellent | Basic locally |
+| Latency Tracking | Excellent | Available through tracing |
+| Token Tracking | Excellent | Available through tracing |
+```
