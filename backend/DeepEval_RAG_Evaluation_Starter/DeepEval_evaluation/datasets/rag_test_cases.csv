@@ -1,0 +1,4 @@
+id,question,expected_output
+RET-001,What is the return window for electronics?,"Replace this with the correct answer from your Refund and Returns Policy PDF."
+RET-002,Replace with your second RAG question,Replace with the expected answer
+RET-003,Replace with your third RAG question,Replace with the expected answer
