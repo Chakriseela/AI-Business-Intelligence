@@ -17,8 +17,8 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from rag_evaluation.adapter import retrieve_for_eval
-from rag_evaluation.config import DATASET_FILE, EVAL_MODEL, RESULTS_DIR
+from backend.DeepEval_evaluation.rag_evaluation.adapter import retrieve_for_eval
+from backend.DeepEval_evaluation.rag_evaluation.config import DATASET_FILE, EVAL_MODEL, RESULTS_DIR
 
 
 # Judge model used by DeepEval metrics.
