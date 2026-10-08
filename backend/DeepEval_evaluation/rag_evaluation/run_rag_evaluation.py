@@ -1,9 +1,10 @@
+import os
 import csv
 import json
-import sys
 from pathlib import Path
 
-from google import genai
+from dotenv import load_dotenv
+
 from deepeval import evaluate
 from deepeval.metrics import (
     ContextualPrecisionMetric,
@@ -12,27 +13,150 @@ from deepeval.metrics import (
 )
 from deepeval.test_case import LLMTestCase
 
-# Make the BizInsight project importable when this file is run from its folder.
-ROOT = Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
-from backend.DeepEval_evaluation.rag_evaluation.adapter import retrieve_for_eval
-from backend.DeepEval_evaluation.rag_evaluation.config import DATASET_FILE, EVAL_MODEL, RESULTS_DIR
+from backend.agents.rag_agent import rag_agent
+from backend.agents.response_agent import response_agent
 
 
-# Judge model used by DeepEval metrics.
+# ============================================================
+# LOAD ENVIRONMENT
+# ============================================================
+
+load_dotenv()
+
+
+# Your existing application may use GEMINI_API_KEY.
+# DeepEval's Gemini integration expects GOOGLE_API_KEY.
+if not os.getenv("GOOGLE_API_KEY"):
+    gemini_key = os.getenv("GEMINI_API_KEY")
+
+    if gemini_key:
+        os.environ["GOOGLE_API_KEY"] = gemini_key
+
+
+# Tell DeepEval to use Gemini
+os.environ["USE_GEMINI_MODEL"] = "1"
+
+# Use the model you want for evaluation.
+# You can change this through the environment if required.
+EVAL_MODEL = os.getenv(
+    "DEEPEVAL_MODEL",
+    "gemini-2.5-flash"
+)
+
+
+# ============================================================
+# PATHS
+# ============================================================
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+
+DATASET_PATH = (
+    BASE_DIR
+    / "datasets"
+    / "rag_test_cases.csv"
+)
+
+RESULTS_DIR = (
+    BASE_DIR
+    / "results"
+)
+
+RESULTS_DIR.mkdir(
+    parents=True,
+    exist_ok=True
+)
+
+
+# ============================================================
+# LOAD DATASET
+# ============================================================
+
+def load_test_cases():
+
+    test_cases = []
+
+    with open(
+        DATASET_PATH,
+        "r",
+        encoding="utf-8-sig",
+        newline=""
+    ) as file:
+
+        reader = csv.DictReader(file)
+
+        for row in reader:
+
+            test_cases.append({
+                "id": row["id"].strip(),
+                "question": row["question"].strip(),
+                "expected_output": row[
+                    "expected_output"
+                ].strip(),
+            })
+
+    return test_cases
+
+
+# ============================================================
+# CONVERT RETRIEVAL RESULT
+# ============================================================
+
+def build_retrieval_context(
+    rag_result: dict
+) -> list[str]:
+
+    context = rag_result.get(
+        "context",
+        ""
+    )
+
+    # Your current rag_agent returns
+    # context as one string.
+    #
+    # DeepEval expects:
+    #
+    # retrieval_context=[
+    #     "chunk 1",
+    #     "chunk 2",
+    #     ...
+    # ]
+
+    if isinstance(context, list):
+
+        return [
+            str(chunk).strip()
+            for chunk in context
+            if str(chunk).strip()
+        ]
+
+    if isinstance(context, str):
+
+        context = context.strip()
+
+        if context:
+            return [context]
+
+    return []
+
+
+# ============================================================
+# CREATE DEEPEVAL METRICS
+# ============================================================
+
 metrics = [
+
     ContextualRelevancyMetric(
         threshold=0.70,
         model=EVAL_MODEL,
         include_reason=True,
     ),
+
     ContextualPrecisionMetric(
         threshold=0.70,
         model=EVAL_MODEL,
         include_reason=True,
     ),
+
     ContextualRecallMetric(
         threshold=0.70,
         model=EVAL_MODEL,
@@ -41,111 +165,262 @@ metrics = [
 ]
 
 
-client = genai.Client()
+# ============================================================
+# MAIN EVALUATION
+# ============================================================
 
+def run_evaluation():
 
-def generate_answer(question: str, retrieval_context: list[str]) -> str:
-    """Generate an answer only so reference-based retrieval metrics have actual_output."""
-    context = "\n\n".join(retrieval_context)
-    prompt = f"""
-Answer the user's question using only the supplied context.
-Do not add facts that are not present in the context.
+    print()
+    print("=" * 80)
+    print("BIZINSIGHT AI - DEEPEVAL RAG EVALUATION")
+    print("=" * 80)
 
-Question:
-{question}
-
-Context:
-{context}
-""".strip()
-
-    response = client.models.generate_content(
-        model=EVAL_MODEL,
-        contents=prompt,
+    print(
+        f"Evaluation model: {EVAL_MODEL}"
     )
-    return (response.text or "").strip()
+
+    dataset = load_test_cases()
+
+    print(
+        f"Dataset size: {len(dataset)}"
+    )
+
+    print("=" * 80)
 
 
-def load_cases() -> list[dict[str, str]]:
-    with DATASET_FILE.open("r", encoding="utf-8-sig", newline="") as file:
-        return list(csv.DictReader(file))
+    deepeval_test_cases = []
+
+    evaluation_metadata = []
 
 
-def build_test_cases() -> list[LLMTestCase]:
-    test_cases: list[LLMTestCase] = []
+    # --------------------------------------------------------
+    # RUN BIZINSIGHT RAG FOR EACH QUESTION
+    # --------------------------------------------------------
 
-    for row in load_cases():
-        case_id = row["id"].strip()
-        question = row["question"].strip()
-        expected_output = row["expected_output"].strip()
+    for test in dataset:
 
-        if not question or question.startswith("Replace with"):
-            print(f"Skipping {case_id}: replace the placeholder question first.")
-            continue
+        test_id = test["id"]
+        question = test["question"]
+        expected_output = test[
+            "expected_output"
+        ]
 
-        if not expected_output or expected_output.startswith("Replace with"):
-            print(f"Skipping {case_id}: replace the placeholder expected answer first.")
-            continue
 
+        print()
         print("=" * 80)
-        print(f"TEST CASE: {case_id}")
-        print(f"Question: {question}")
+        print(f"TEST CASE: {test_id}")
+        print("=" * 80)
 
-        retrieval_context, sources = retrieve_for_eval(question)
-        print(f"Retrieved chunks: {len(retrieval_context)}")
-        print(f"Sources: {sources}")
+        print()
+        print("Question:")
+        print(question)
 
-        actual_output = generate_answer(question, retrieval_context)
-        print(f"Generated answer: {actual_output}")
 
-        test_cases.append(
-            LLMTestCase(
-                input=question,
-                actual_output=actual_output,
-                expected_output=expected_output,
-                retrieval_context=retrieval_context,
+        # ----------------------------------------------------
+        # 1. RUN YOUR EXISTING RAG AGENT
+        # ----------------------------------------------------
+
+        try:
+
+            rag_result = rag_agent(
+                question
+            )
+
+        except Exception as exc:
+
+            print()
+            print(
+                f"RAG AGENT ERROR: {exc}"
+            )
+
+            continue
+
+
+        # ----------------------------------------------------
+        # 2. EXTRACT RETRIEVED CONTEXT
+        # ----------------------------------------------------
+
+        retrieval_context = (
+            build_retrieval_context(
+                rag_result
             )
         )
 
-    return test_cases
 
-
-def save_summary(test_cases_count: int) -> None:
-    summary = {
-        "test_cases": test_cases_count,
-        "metrics": [
-            "ContextualRelevancyMetric",
-            "ContextualPrecisionMetric",
-            "ContextualRecallMetric",
-        ],
-        "threshold": 0.70,
-        "model": EVAL_MODEL,
-    }
-    output_file = RESULTS_DIR / "rag_evaluation_config.json"
-    output_file.write_text(json.dumps(summary, indent=2), encoding="utf-8")
-    print(f"\nConfiguration written to: {output_file}")
-
-
-def main() -> None:
-    test_cases = build_test_cases()
-
-    if not test_cases:
-        raise RuntimeError(
-            "No valid test cases found. Fill datasets/rag_test_cases.csv first."
+        print()
+        print(
+            "Retrieved context count:"
         )
 
-    print("\n" + "=" * 80)
-    print("STARTING BIZINSIGHT DEEPEVAL RAG RETRIEVAL EVALUATION")
-    print("=" * 80)
-    print(f"Dataset size: {len(test_cases)}")
-    print(f"Evaluation model: {EVAL_MODEL}")
+        print(
+            len(retrieval_context)
+        )
 
-    evaluate(
-        test_cases=test_cases,
+
+        if not retrieval_context:
+
+            print(
+                "WARNING: No retrieval context found."
+            )
+
+
+        # ----------------------------------------------------
+        # 3. RUN YOUR EXISTING RESPONSE AGENT
+        # ----------------------------------------------------
+
+        try:
+
+            actual_output = response_agent(
+                question=question,
+                sql_result=None,
+                rag_result=rag_result,
+            )
+
+        except Exception as exc:
+
+            print()
+            print(
+                f"RESPONSE AGENT ERROR: {exc}"
+            )
+
+            actual_output = ""
+
+
+        # Make sure output is always string
+        if actual_output is None:
+
+            actual_output = ""
+
+        actual_output = str(
+            actual_output
+        )
+
+
+        print()
+        print("Generated Answer:")
+        print(actual_output)
+
+
+        # ----------------------------------------------------
+        # 4. CREATE DEEPEVAL TEST CASE
+        # ----------------------------------------------------
+
+        deepeval_case = LLMTestCase(
+
+            input=question,
+
+            actual_output=actual_output,
+
+            expected_output=expected_output,
+
+            retrieval_context=retrieval_context,
+        )
+
+
+        deepeval_test_cases.append(
+            deepeval_case
+        )
+
+
+        evaluation_metadata.append({
+
+            "id": test_id,
+
+            "question": question,
+
+            "expected_output":
+                expected_output,
+
+            "actual_output":
+                actual_output,
+
+            "retrieval_context":
+                retrieval_context,
+
+            "sources":
+                rag_result.get(
+                    "sources",
+                    []
+                ),
+
+            "document_count":
+                rag_result.get(
+                    "document_count",
+                    0
+                ),
+        })
+
+
+    # --------------------------------------------------------
+    # RUN DEEPEVAL
+    # --------------------------------------------------------
+
+    if not deepeval_test_cases:
+
+        print()
+        print(
+            "No test cases were created."
+        )
+
+        return
+
+
+    print()
+    print("=" * 80)
+    print("STARTING DEEPEVAL METRICS")
+    print("=" * 80)
+
+
+    results = evaluate(
+
+        test_cases=deepeval_test_cases,
+
         metrics=metrics,
     )
 
-    save_summary(len(test_cases))
+
+    # --------------------------------------------------------
+    # SAVE RAW INFORMATION
+    # --------------------------------------------------------
+
+    output_file = (
+        RESULTS_DIR
+        / "rag_evaluation_cases.json"
+    )
+
+
+    with open(
+        output_file,
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        json.dump(
+            evaluation_metadata,
+            file,
+            indent=4,
+            ensure_ascii=False,
+        )
+
+
+    print()
+    print("=" * 80)
+    print("RAG EVALUATION COMPLETED")
+    print("=" * 80)
+
+    print()
+    print(
+        f"Evaluation data saved to:"
+    )
+
+    print(
+        output_file
+    )
+
+    print()
 
 
 if __name__ == "__main__":
-    main()
+
+    run_evaluation()
