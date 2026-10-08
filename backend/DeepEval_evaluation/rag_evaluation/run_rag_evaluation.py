@@ -82,7 +82,7 @@ RESULTS_DIR.mkdir(
 
 EVAL_MODEL_NAME = os.getenv(
     "DEEPEVAL_MODEL",
-    "gemini-2.5-flash"
+    "gemini-3.8-flash"
 )
 
 eval_model = GeminiModel(
