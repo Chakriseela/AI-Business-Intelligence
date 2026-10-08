@@ -13,8 +13,8 @@ from deepeval.metrics import (
 )
 from deepeval.test_case import LLMTestCase
 
-from backend.agents.rag_agent import rag_agent
-from backend.agents.response_agent import response_agent
+from backend.agents import rag_agent
+from backend.agents import response_agent
 
 
 # ============================================================
@@ -40,7 +40,7 @@ os.environ["USE_GEMINI_MODEL"] = "1"
 # You can change this through the environment if required.
 EVAL_MODEL = os.getenv(
     "DEEPEVAL_MODEL",
-    "gemini-2.5-flash"
+    "gemini-3.6-flash"
 )
 
 

@@ -44,6 +44,7 @@ def retrieve_context(question: str) -> dict:
 
     return {
         "context": "\n\n".join(context_parts),
+        "context_parts": context_parts,
         "sources": sources,
     }
 

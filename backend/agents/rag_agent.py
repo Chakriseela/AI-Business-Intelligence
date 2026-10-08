@@ -58,6 +58,7 @@ def rag_agent(
             "document_count": len(
                 sources
             ),
+            "retrieval_result": retrieval_result,
         }
 
 
@@ -78,6 +79,8 @@ if __name__ == "__main__":
     print("\n" + "=" * 60)
     print("RAG AGENT")
     print("=" * 60)
+
+    print(f"retrival results: {result.get('retrieval_result', {})}")
 
     print("\nRetrieved Context:")
     print(
