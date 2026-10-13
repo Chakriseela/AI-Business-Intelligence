@@ -137,6 +137,8 @@ Rows:
                     f"{model_provider}/{model_name} returned "
                     "an empty response."
                 )
+            llm_span.set_attribute("llm.response_length", len(answer))
+            llm_span.set_attribute("llm.response", answer)
             return answer
  
 
