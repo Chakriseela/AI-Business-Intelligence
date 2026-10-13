@@ -10,9 +10,8 @@ from backend.Phoenix_evaluation.evaluators import (
     get_evaluators
 )
 
-from backend.Phoenix_evaluation.config import (
+from backend.config.settings import (
     PHOENIX_BASE_URL,
-    PHOENIX_API_KEY,
     PHOENIX_DATASET_NAME,
     DATASET_PATH,
     EXPERIMENT_NAME,
@@ -28,8 +27,7 @@ from backend.Phoenix_evaluation.config import (
 def get_phoenix_client():
 
     client = Client(
-        base_url=PHOENIX_BASE_URL,
-        api_key=PHOENIX_API_KEY
+        base_url=PHOENIX_BASE_URL
     )
 
     return client

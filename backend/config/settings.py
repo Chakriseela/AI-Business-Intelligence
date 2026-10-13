@@ -20,7 +20,7 @@ TOP_K = 4
 # Phoenix 
 #=========================================================
 PHOENIX_PROJECT_NAME = "bizinsight-ai"
-PHOENIX_ENDPOINT = "http://localhost:6006"
+PHOENIX_BASE_URL = "http://localhost:6006"
 
 #=========================================================
 # Dataset
