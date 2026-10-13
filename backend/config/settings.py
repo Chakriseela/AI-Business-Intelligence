@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3.5:0.8b")
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 KNOWLEDGE_BASE_DIR = PROJECT_ROOT / "knowledge_base"
@@ -14,3 +14,15 @@ EMBEDDING_MODEL = "models/gemini-embedding-001"
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 120
 TOP_K = 4
+
+
+#=========================================================
+# Phoenix 
+#=========================================================
+PHOENIX_PROJECT_NAME = "bizinsight-ai"
+PHOENIX_ENDPOINT = "http://localhost:6006"
+
+#=========================================================
+# Dataset
+#=========================================================
+DATASET_PATH = PROJECT_ROOT / "backend" / "Phoenix_evaluation" / "datasets" / "bizinsight_dataset.csv"
