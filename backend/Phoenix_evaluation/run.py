@@ -1,4 +1,4 @@
-from backend.Phonenix_evaluation.experiment import run_experiment
+from backend.Phoenix_evaluation.experiment import run_experiment
 from backend.config.settings import DATASET_PATH 
 
 def main():

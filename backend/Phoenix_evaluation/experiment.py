@@ -1,6 +1,6 @@
 import pandas as pd
 
-from backend.evaluation.client import ask
+from backend.Phoenix_evaluation.client import ask
 
 
 def run_experiment(dataset_path):
@@ -30,5 +30,7 @@ def run_experiment(dataset_path):
                 "latency": prediction["latency"],
             }
         )
+
+        print(results)
 
     return results

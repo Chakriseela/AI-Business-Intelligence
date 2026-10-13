@@ -1,0 +1,19 @@
+2,How long is the warranty for electronics?,Electronics have a standard warranty of 2 years covering manufacturing defects under normal use.,rag
+3,What warranty is provided for accessories?,Accessories have a standard warranty of 1 year covering manufacturing defects.,rag
+4,How many years of warranty does furniture have?,Furniture includes a standard warranty of 3 years covering structural defects under normal use.,rag
+5,What is the warranty period for batteries?,Batteries have a warranty period of 6 months covering manufacturing defects within the battery warranty period.,rag
+6,Does the warranty cover accidental damage?,No. Damage caused by misuse, unauthorized modification, or accidental impact may be excluded from warranty coverage.,rag
+7,Is proof of purchase required for a warranty claim?,Yes. Proof of purchase may be required when making a warranty claim.,rag
+8,Will the serial number be required for a warranty claim?,Yes. The product serial number or other identifying information may be requested.,rag
+9,Does the warranty extend the return window?,No. Warranty coverage does not extend the return window unless a separate exception applies.,rag
+10,How should warranty eligibility be determined?,Determine the product type and purchase timing from structured data, then apply the warranty duration and exclusions defined in the warranty policy.,rag
+11,How can I cancel an order?,Cancellation depends on the current order status. Orders already in shipment may require a return workflow instead.,rag
+12,How do I track my shipment?,Tracking information is generally available after dispatch, and the assistant should use the order record for the latest shipment status.,rag
+13,Can I exchange a product?,Exchange availability depends on the product category, product condition, and the applicable return policy.,rag
+14,How long is the warranty?,Warranty duration depends on the product type. Refer to the warranty policy for the approved coverage period.,rag
+15,What benefits do Platinum customers receive?,Platinum customers receive the benefits defined in the loyalty program, including a standard 15% discount on eligible products.,rag
+16,Which document should be used to answer warranty duration questions?,The Product Warranty Policy document should be used to answer warranty duration questions.,rag
+17,Which document explains order cancellation?,The Business Support FAQ explains the order cancellation process and related business rules.,rag
+18,What information should be checked before approving warranty coverage?,The assistant should identify the product type and purchase timing from structured data and then apply the warranty rules and exclusions from the warranty policy.,rag
+19,Does misuse affect warranty coverage?,Yes. Damage caused by misuse is excluded from warranty coverage.,rag
+20,What determines whether a product exchange is allowed?,The product category, product condition, and applicable return policy determine whether an exchange is allowed.,rag
