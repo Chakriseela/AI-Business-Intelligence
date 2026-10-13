@@ -26,3 +26,16 @@ PHOENIX_ENDPOINT = "http://localhost:6006"
 # Dataset
 #=========================================================
 DATASET_PATH = PROJECT_ROOT / "backend" / "Phoenix_evaluation" / "datasets" / "bizinsight_dataset.csv"
+PHOENIX_DATASET_NAME = "bizinsight-evaluation-dataset"
+EVALUATION_JUDGE_MODEL = "gemini-2.5-flash"
+
+#=========================================================
+# EXPERIMENT CONFIGURATION
+#=========================================================
+EXPERIMENT_NAME = "BizInsight-RAG-Evaluation-Experiment"
+
+EXPERIMENT_DESCRIPTION = (
+    "Evaluation of BizInsight AI using "
+    "correctness, relevance and "
+    "unsupported-claims metrics. "
+)
