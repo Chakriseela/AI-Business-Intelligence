@@ -90,3 +90,11 @@ npm run dev
 phoenix serve
 python -m backend.evaluation.run_evaluation
 ```
+
+
+git add .
+git commit -m "Adding datasets to Phoenix and adding evaluations"
+git push
+
+
+git pull

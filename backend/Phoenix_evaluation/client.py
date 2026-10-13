@@ -1,6 +1,6 @@
 import time
 
-from backend.agents.orchestrator import run_workflow
+from backend.agents.orchestrator import graph
 
 
 def ask(question: str) -> dict:
@@ -19,7 +19,9 @@ def ask(question: str) -> dict:
 
     start = time.perf_counter()
 
-    result = run_workflow(question)
+    result = graph.invoke({
+        "question": question
+    })
 
     latency = time.perf_counter() - start
 
