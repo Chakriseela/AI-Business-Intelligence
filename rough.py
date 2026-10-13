@@ -384,3 +384,14 @@ Traceback (most recent call last):
     raise ClientError(status_code, response_json, response)
 google.genai.errors.ClientError: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flashis no longer available to new users. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).', 'status': 'NOT_FOUND'}}
 PS D:\D_drive\MY_PROJECTS\14. AI Business Intelligence\AI-Business-Intelligence (Git Repo)\bizinsight-ai> 
+
+
+
+
+
+
+
+pip show openinference-instrumentation
+pip show openinference-instrumentation-google-genai
+pip list | findstr phoenix
+pip list | findstr openinference
