@@ -6,7 +6,7 @@ from phoenix.client import Client
 
 from backend.Phoenix_evaluation.client import ask
 
-from backend.Phoenix_evaluation.evaluatorss import (
+from backend.Phoenix_evaluation.evaluators.registry import (
     get_evaluators
 )
 

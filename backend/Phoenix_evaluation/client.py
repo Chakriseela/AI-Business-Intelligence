@@ -79,5 +79,6 @@ def ask(question: str) -> dict:
         "answer": final_answer,
         "route": str(route),
         "sources": sources,
-        "latency": round(latency, 3)
+        "latency": round(latency, 3),
+        "context": result.get("context", "")
     }
