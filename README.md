@@ -89,6 +89,7 @@ cd frontend-react
 npm run dev
 phoenix serve
 python -m backend.evaluation.run_evaluation
+python -m backend.Phoenix_evaluation.run
 ```
 
 
