@@ -3,7 +3,7 @@ import json
 from google import genai
 from google.genai import types
 
-from backend.Phoenix_evaluation.config import (
+from backend.config.settings import (
     GEMINI_API_KEY,
     JUDGE_MODEL
 )
