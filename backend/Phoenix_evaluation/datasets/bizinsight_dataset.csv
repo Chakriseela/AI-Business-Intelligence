@@ -1,9 +1,4 @@
 id,question,ground_truth,category
-1,What is the warranty period for laptops?,Laptops have a standard warranty of 2 years covering manufacturing defects and covered hardware failures.,rag
-2,How long is the warranty for electronics?,Electronics have a standard warranty of 2 years covering manufacturing defects under normal use.,rag
-3,What warranty is provided for accessories?,Accessories have a standard warranty of 1 year covering manufacturing defects.,rag
-4,How many years of warranty does furniture have?,Furniture includes a standard warranty of 3 years covering structural defects under normal use.,rag
-5,What is the warranty period for batteries?,Batteries have a warranty period of 6 months covering manufacturing defects within the battery warranty period.,rag
-6,Is proof of purchase required for a warranty claim?,Yes. Proof of purchase may be required when making a warranty claim.,rag
-7,Will the serial number be required for a warranty claim?,Yes. The product serial number or other identifying information may be requested.,rag
-8,Does the warranty extend the return window?,No. Warranty coverage does not extend the return window unless a separate exception applies.,rag
+9,How should warranty eligibility be determined?,Determine the product type and purchase timing from structured data, then apply the warranty duration and exclusions defined in the warranty policy.,rag
+10,How can I cancel an order?,Cancellation depends on the current order status. Orders already in shipment may require a return workflow instead.,rag
+11,How do I track my shipment?,Tracking information is generally available after dispatch, and the assistant should use the order record for the latest shipment status.,rag

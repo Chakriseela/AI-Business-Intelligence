@@ -130,7 +130,7 @@ def register_dataset(
     ).hexdigest()[:12]
 
     dataset_name = (
-        f"{PHOENIX_DATASET_NAME}-{dataset_hash}"
+        f"{PHOENIX_DATASET_NAME}-bb1c298d0bf5"
     )
 
     # --------------------------------------
