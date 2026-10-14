@@ -4,3 +4,6 @@ id,question,ground_truth,category
 3,What warranty is provided for accessories?,Accessories have a standard warranty of 1 year covering manufacturing defects.,rag
 4,How many years of warranty does furniture have?,Furniture includes a standard warranty of 3 years covering structural defects under normal use.,rag
 5,What is the warranty period for batteries?,Batteries have a warranty period of 6 months covering manufacturing defects within the battery warranty period.,rag
+6,Is proof of purchase required for a warranty claim?,Yes. Proof of purchase may be required when making a warranty claim.,rag
+7,Will the serial number be required for a warranty claim?,Yes. The product serial number or other identifying information may be requested.,rag
+8,Does the warranty extend the return window?,No. Warranty coverage does not extend the return window unless a separate exception applies.,rag

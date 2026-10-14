@@ -1,3 +1,5 @@
+id,question,ground_truth,category
+1,What is the warranty period for laptops?,Laptops have a standard warranty of 2 years covering manufacturing defects and covered hardware failures.,rag
 2,How long is the warranty for electronics?,Electronics have a standard warranty of 2 years covering manufacturing defects under normal use.,rag
 3,What warranty is provided for accessories?,Accessories have a standard warranty of 1 year covering manufacturing defects.,rag
 4,How many years of warranty does furniture have?,Furniture includes a standard warranty of 3 years covering structural defects under normal use.,rag
