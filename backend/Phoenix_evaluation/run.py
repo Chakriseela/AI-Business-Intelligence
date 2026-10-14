@@ -11,7 +11,7 @@ def main():
     print("BizInsight AI - Experiment Runner")
     print("="*70)
 
-    run_experiment(DATASET_PATH)
+    run_experiment()
 
 if __name__ == "__main__":
     main()
