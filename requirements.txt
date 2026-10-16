@@ -6,6 +6,7 @@ langchain-chroma
 chromadb
 pypdf
 mcp
+mcp<2
 ollama
 
 

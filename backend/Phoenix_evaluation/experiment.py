@@ -105,65 +105,35 @@ def load_csv_dataset():
 # REGISTER PHOENIX DATASET
 # ==========================================
 
-def register_dataset(
-    client,
-    df
-):
+
+# ==========================================
+# REGISTER PHOENIX DATASET
+# ==========================================
+
+def register_dataset(client, df):
 
     print("\nRegistering dataset in Phoenix...")
 
-    # --------------------------------------
-    # GENERATE DATASET VERSION IDENTIFIER
-    # --------------------------------------
-
-    # A content hash prevents silently
-    # reusing an outdated dataset after
-    # the CSV has been edited.
-
-    csv_content = (
-        df.to_csv(index=False)
-        .encode("utf-8")
-    )
+    # STEP 1: Generate a hash from the latest CSV data
+    csv_content = df.to_csv(
+        index=False
+    ).encode("utf-8")
 
     dataset_hash = hashlib.sha256(
         csv_content
     ).hexdigest()[:12]
 
+    # Different CSV content gets a different dataset name
     dataset_name = (
-        f"{PHOENIX_DATASET_NAME}-bb1c298d0bf5"
+        f"{PHOENIX_DATASET_NAME}-{dataset_hash}"
     )
 
-    # --------------------------------------
-    # CHECK WHETHER DATASET EXISTS
-    # --------------------------------------
+    print(f"CSV content hash: {dataset_hash}")
+    print(f"Target dataset: {dataset_name}")
 
-    existing_datasets = (
-        client.datasets.list()
-    )
-
-    dataset_exists = any(
-        item["name"] == dataset_name
-        for item in existing_datasets
-    )
-
-    if dataset_exists:
-
-        print(
-            f"Reusing existing dataset: {dataset_name}"
-        )
-
-        return client.datasets.get_dataset(
-            dataset=dataset_name
-        )
-
-    # --------------------------------------
-    # PREPARE DATASET EXAMPLES
-    # --------------------------------------
-
+    # STEP 2: Prepare examples from the latest CSV
     inputs = []
-
     outputs = []
-
     metadata = []
 
     for _, row in df.iterrows():
@@ -181,10 +151,31 @@ def register_dataset(
             "category": row["category"]
         })
 
-    # --------------------------------------
-    # CREATE DATASET IN PHOENIX
-    # --------------------------------------
+    print(f"Prepared {len(inputs)} examples.")
 
+    # STEP 3: Check whether this exact CSV version exists
+    existing_datasets = client.datasets.list()
+
+    dataset_exists = any(
+        item["name"] == dataset_name
+        for item in existing_datasets
+    )
+
+    if dataset_exists:
+
+        print(
+            f"Found existing dataset version: {dataset_name}"
+        )
+
+        dataset = client.datasets.get_dataset(
+            dataset=dataset_name
+        )
+
+        print("Reusing the dataset for this CSV version.")
+
+        return dataset
+
+    # STEP 4: Create a dataset for this CSV version
     dataset = client.datasets.create_dataset(
         name=dataset_name,
         inputs=inputs,
@@ -192,15 +183,15 @@ def register_dataset(
         metadata=metadata,
         dataset_description=(
             "BizInsight AI evaluation dataset "
-            "created from CSV."
+            f"created from CSV. Content hash: {dataset_hash}"
         )
     )
 
-    print(
-        f"Dataset registered: {dataset_name}"
-    )
+    print(f"Dataset created: {dataset_name}")
+    print(f"Examples uploaded: {len(inputs)}")
 
     return dataset
+
 
 
 # ==========================================

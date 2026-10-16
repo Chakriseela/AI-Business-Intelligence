@@ -26,6 +26,8 @@ def response_agent(
         span.set_attribute("input.question", question)
         span.set_attribute("llm.provider", model_provider)
         span.set_attribute("llm.model", model_name)
+        span.set_attribute("sql_result", sql_result)
+        span.set_attribute("rag_result", rag_result)
     
         """
         Final Response Agent.

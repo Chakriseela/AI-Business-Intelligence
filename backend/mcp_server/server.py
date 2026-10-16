@@ -143,4 +143,4 @@ def execute_readonly_sql(query: str) -> dict:
 # ---------------------------------------------------------
 
 if __name__ == "__main__":
-    mcp.run()
+    mcp.run(transport="studio")

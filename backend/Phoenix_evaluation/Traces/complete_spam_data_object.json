@@ -1,0 +1,32 @@
+{
+    "name": "llm.response_generation",
+    "span_kind": "UNKNOWN",
+    "parent_id": "400cdd3dc3c0c3e0",
+    "start_time": "2026-10-15 22:00:31.100211+00:00",
+    "end_time": "2026-10-15 22:00:36.788179+00:00",
+    "status_code": "UNSET",
+    "status_message": "",
+    "events": [],
+    "context.span_id": "109d6fc4eaea47bb",
+    "context.trace_id": "4080b0e60f76fca646afff93c5c09f14",
+    "attributes.llm": {
+        "response": "### Total Sales Summary\n\n* **Total Completed Sales:** $71,318,860.00\n* **Order Status Filter:** Completed Orders Only",
+        "model": "gemini-3.6-flash",
+        "response_length": 117
+    },
+    "attributes.input": null,
+    "attributes.llm.provider": NaN,
+    "attributes.agent.name": NaN,
+    "attributes.jsonrpc": null,
+    "attributes.mcp": null,
+    "attributes.db": null,
+    "attributes.sql": null,
+    "attributes.orchestrator": null,
+    "attributes.code": null,
+    "attributes.network": null,
+    "attributes.http": null,
+    "attributes.url": null,
+    "attributes.server": null,
+    "attributes.retrieved": null,
+    "attributes.rag": null
+}
