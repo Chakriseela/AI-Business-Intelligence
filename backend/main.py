@@ -8,7 +8,8 @@ from fastapi import (
 )
 
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from confident_trace import update_trace
 from backend.agents.orchestrator import graph
 from backend.config.settings import GEMINI_MODEL
 from backend.observability.phoenix_setup import tracer_provider
@@ -60,6 +61,7 @@ app.add_middleware(
 class ChatRequest(BaseModel):
 
     question: str
+    test_case_id: str | None = Field(default=None, alias="testCaseId")
  
  
 # =========================================================
@@ -117,6 +119,8 @@ def chat(request: ChatRequest):
         with tracer.start_as_current_span("bizinsight.workflow") as span:
             
             span.set_attribute("input.question", question)
+            if request.test_case_id:
+                update_trace(test_case_id=request.test_case_id)
 
             result = graph.invoke(
 
