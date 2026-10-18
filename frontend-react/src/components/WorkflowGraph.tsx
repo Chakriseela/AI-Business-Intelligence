@@ -197,9 +197,7 @@ export default function WorkflowGraph({
  
  
     // -----------------------------------------------------
-
     // SQL Branch
-
     // -----------------------------------------------------
  
     {
@@ -695,40 +693,25 @@ export default function WorkflowGraph({
 <div className="workflow-flow-container">
  
       <ReactFlow
-
         nodes={nodes}
-
         edges={edges}
-
         nodeTypes={nodeTypes}
-
         fitView
-
         fitViewOptions={{
-
           padding: 0.18,
-
         }}
-
         nodesDraggable={false}
-
         nodesConnectable={false}
-
         elementsSelectable={false}
->
- 
+        >
+          
         <Background
-
           gap={20}
-
           size={1}
-
         />
  
         <Controls
-
           showInteractive={false}
-
         />
  
       </ReactFlow>

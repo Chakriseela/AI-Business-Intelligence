@@ -54,6 +54,7 @@ The console should show the most relevant chunks and the source PDF/page metadat
 
 ```
 pip install arize-phoenix openinference-instrumentation openinference-instrumentation-langchain
+pip install -U "psycopg[binary,pool]" langgraph-checkpoint-postgres
 
 
 

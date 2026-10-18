@@ -59,7 +59,12 @@ export default function App() {
     const socket = new WebSocket("ws://127.0.0.1:8000/ws/chat");
     socketRef.current = socket;
 
-    socket.onopen = () => socket.send(JSON.stringify({ question: question.trim(), model_provider: modelProvider, model_name: modelName }));
+    socket.onopen = () => socket.send(
+      JSON.stringify(
+        { question: question.trim(), 
+          model_provider: modelProvider, 
+          model_name: modelName 
+        }));
 
     socket.onmessage = (event) => {
       try {
@@ -69,7 +74,8 @@ export default function App() {
 
         if (data.type === "agent_status") {
           if (data.agent) setAgentStatus((prev) => ({ ...prev, [data.agent]: data.status }));
-          if (data.agent === "orchestrator" && data.route) setRoute(data.route);
+          if (data.agent === "orchestrator" && data.route) 
+            setRoute(data.route);
           return;
         }
 
@@ -81,20 +87,24 @@ export default function App() {
 
         if (data.type === "agent" && data.agent === "sql_agent") {
           setAgentStatus((prev) => ({ ...prev, sql_agent: "completed" }));
-          setSql(data.sql || null); setMcpTool(data.mcp_tool || null);
-          setDatabaseRows(data.database_rows || 0); setDatabaseData(data.database_data || []);
+          setSql(data.sql || null); 
+          setMcpTool(data.mcp_tool || null);
+          setDatabaseRows(data.database_rows || 0); 
+          setDatabaseData(data.database_data || []);
           return;
         }
 
         if (data.type === "agent" && data.agent === "rag_agent") {
           setAgentStatus((prev) => ({ ...prev, rag_agent: "completed" }));
-          setRagSources(data.sources || []); setRagContext(data.context || "");
+          setRagSources(data.sources || []); 
+          setRagContext(data.context || "");
           return;
         }
 
         if (data.type === "agent" && data.agent === "response_agent") {
           setAgentStatus((prev) => ({ ...prev, response_agent: "completed" }));
-          if (data.answer !== undefined && data.answer !== null) setAnswer(String(data.answer));
+          if (data.answer !== undefined && data.answer !== null) 
+            setAnswer(String(data.answer));
           return;
         }
 
@@ -102,15 +112,59 @@ export default function App() {
 
         if (data.type === "error") { setAnswer(data.message || "Workflow failed."); setLoading(false); return; }
 
+        
         if (data.type === "workflow_completed") {
-          setRoute(data.route || null);
-          if (data.answer !== undefined && data.answer !== null && String(data.answer).trim()) setAnswer(String(data.answer));
-          setSql(data.sql || null); setMcpTool(data.mcp_tool || null);
-          setDatabaseRows(data.database_rows || 0); setDatabaseData(Array.isArray(data.database_data) ? data.database_data : []);
-          setRagSources(Array.isArray(data.retrieved_documents) ? data.retrieved_documents : []);
-          setRagContext(data.rag_context || ""); setLogs(Array.isArray(data.logs) ? data.logs : []);
-          setLoading(false); socket.close();
+          // // Route
+          // if ("route" in data) {
+          //   setRoute(data.route ?? null);
+          // }
+
+          // Final answer
+          if (
+            data.answer !== undefined &&
+            data.answer !== null &&
+            String(data.answer).trim()
+          ) {
+            setAnswer(String(data.answer));
+          }
+
+          // // SQL
+          // if ("sql" in data) {
+          //   setSql(data.sql ?? null);
+          // }
+
+          // if ("mcp_tool" in data) {
+          //   setMcpTool(data.mcp_tool ?? null);
+          // }
+
+          // if ("database_rows" in data) {
+          //   setDatabaseRows(data.database_rows ?? 0);
+          // }
+
+          // if (Array.isArray(data.database_data)) {
+          //   setDatabaseData(data.database_data);
+          // }
+
+          // // RAG
+          // if (Array.isArray(data.retrieved_documents)) {
+          //   setRagSources(data.retrieved_documents);
+          // }
+
+          // if ("rag_context" in data) {
+          //   setRagContext(data.rag_context ?? "");
+          // }
+
+          // // Logs
+          // if (Array.isArray(data.logs)) {
+          //   setLogs(data.logs);
+          // }
+
+          // Finish workflow
+          setLoading(false);
+          socket.close();
+          return;
         }
+
       } catch (error) { console.error("Failed to parse WebSocket event:", error); }
     };
 
@@ -122,6 +176,7 @@ export default function App() {
     <div className="app">
       <Sidebar onNewAnalysis={() => { socketRef.current?.close(); setQuestion(""); resetWorkflow(); setLoading(false); }} />
       <main className="main">
+
         <TopBar />
         <QuestionPanel
           question={question}

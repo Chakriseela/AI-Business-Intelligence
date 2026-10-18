@@ -9,8 +9,8 @@ export default function ModelSelector({ provider, model, onChange, disabled }) {
         disabled={disabled}
         onChange={(event) => onChange(event.target.value)}
       >
-        <option value="gemini">Gemini · {model}</option>
-        <option value="ollama">Ollama · {model}</option>
+        <option value="gemini">Gemini · gemini-3.8</option>
+        <option value="ollama">Ollama · qwen3.5</option>
       </select>
     </div>
   );
