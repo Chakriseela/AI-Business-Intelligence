@@ -39,3 +39,8 @@ EXPERIMENT_DESCRIPTION = (
     "correctness, relevance and "
     "unsupported-claims metrics. "
 )
+
+#=========================================================
+# Postgres Checkpoint Configuration  
+#=========================================================
+POSTGRES_CHECKPOINT_URI = os.getenv("POSTGRES_CHECKPOINT_URI")

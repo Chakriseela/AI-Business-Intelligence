@@ -1,5 +1,5 @@
 import json
-import pandas as pd
+# import pandas as pd
 from backend.config.settings import PHOENIX_BASE_URL
 from phoenix.client import Client
 # python.exe -m backend.Phoenix_evaluation.Traces.traces

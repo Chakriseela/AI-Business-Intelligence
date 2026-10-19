@@ -6,13 +6,57 @@ from fastapi import (
     WebSocket,
     WebSocketDisconnect,
 )
+from contextlib import asynccontextmanager
+from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
+from psycopg_pool import AsyncConnectionPool
+from psycopg.rows import dict_row
 
+from backend.agents.orchestrator import builder
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from backend.agents.orchestrator import graph
+# from backend.agents.orchestrator import graph
 from backend.config.settings import GEMINI_MODEL
+from backend.config.settings import POSTGRES_CHECKPOINT_URI
 from backend.observability.phoenix_setup import tracer_provider
 from backend.observability.phoenix_setup import tracer
+
+
+# =========================================================
+# Lifespan Event Handler    
+# =========================================================
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    pool = AsyncConnectionPool(
+        conninfo=POSTGRES_CHECKPOINT_URI,
+        min_size=1,
+        max_size=10,
+        kwargs={
+            "autocommit": True,
+            "prepare_threshold": 0,
+            "row_factory": dict_row,
+        },
+        open=False,
+    )
+
+    await pool.open()
+
+    try:
+        checkpointer = AsyncPostgresSaver(pool)
+        await checkpointer.setup()
+
+        app.state.db_pool = pool
+        app.state.checkpointer = checkpointer
+        app.state.graph = builder.compile(
+            checkpointer=checkpointer
+        )
+
+        yield
+
+    finally:
+        await pool.close()
+
+
  
  
 # =========================================================
@@ -23,6 +67,7 @@ app = FastAPI(
     title="BizInsight AI",
     description="Multi-Agent Business Intelligence Assistant",
     version="1.0.0",
+    lifespan=lifespan,
 )
  
  
@@ -159,6 +204,71 @@ def chat(request: ChatRequest):
 
         ) from exc
  
+
+@app.get("/chat/history/{thread_id}")
+async def get_chat_history(thread_id: str):
+    graph = app.state.graph
+
+    config = {
+        "configurable": {
+            "thread_id": thread_id
+        }
+    }
+
+    snapshot = await graph.aget_state(config)
+
+    return {
+        "thread_id": thread_id,
+        "history": snapshot.values.get(
+            "conversation_history", []
+        ),
+    }
+
+from fastapi import HTTPException
+
+
+@app.get("/chat/conversations")
+async def get_conversations():
+    graph = app.state.graph
+
+    conversations = []
+    seen_threads = set()
+
+    try:
+        async for checkpoint in graph.checkpointer.alist(None):
+            config = checkpoint.config
+            configurable = config.get("configurable", {})
+            thread_id = configurable.get("thread_id")
+
+            # Keep only the latest checkpoint for each thread.
+            if not thread_id or thread_id in seen_threads:
+                continue
+
+            seen_threads.add(thread_id)
+
+            values = checkpoint.checkpoint.get("channel_values", {})
+            history = values.get("conversation_history", [])
+
+            # Generate a title from the first question if available.
+            title = "New conversation"
+
+            if history:
+                title = history[0].get(
+                    "question", title
+                )
+
+            conversations.append({
+                "thread_id": thread_id,
+                "title": title,
+            })
+
+        return {"conversations": conversations}
+
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to retrieve conversations: {str(exc)}",
+        ) from exc
  
 # =========================================================
 # WebSocket Chat Endpoint
@@ -184,6 +294,8 @@ async def websocket_chat(websocket: WebSocket,):
     """
  
     await websocket.accept()
+
+    graph = websocket.app.state.graph
  
     try:
         while True:
@@ -193,6 +305,19 @@ async def websocket_chat(websocket: WebSocket,):
             # =================================================
  
             request = await websocket.receive_json()
+
+            import uuid 
+
+            # thread_id = str(request.get("thread_id") or uuid.uuid4())
+            thread_id = "Chakri_111"
+
+            thread_id = str(request.get("thread_id") or uuid.uuid4())
+
+            config = {
+                "configurable": {
+                    "thread_id": thread_id
+                }
+            }
  
             question = str(
                 request.get(
@@ -227,6 +352,7 @@ async def websocket_chat(websocket: WebSocket,):
             # =================================================
             await websocket.send_json({
                 "type": "workflow_started",
+                "thread_id": thread_id,
                 "question": question,
             })
  
@@ -277,6 +403,7 @@ async def websocket_chat(websocket: WebSocket,):
  
                     for update in graph.stream(
                         initial_state,
+                        config=config,
                         stream_mode="updates",
                     ):
  
@@ -380,10 +507,7 @@ async def websocket_chat(websocket: WebSocket,):
  
                 for node_name, node_data in update.items():
  
-                    if not isinstance(
-                        node_data,
-                        dict
-                    ):
+                    if not isinstance(node_data,dict):
                         node_data = {}
  
                     # ---------------------------------------------

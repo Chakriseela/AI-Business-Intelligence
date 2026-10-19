@@ -11,3 +11,7 @@ ollama
 
 
 websockets
+
+langgraph-checkpoint-postgres 
+psycopg 
+psycopg-pool

@@ -1,6 +1,12 @@
 import { Sparkles, Plus, Settings2 } from "lucide-react";
+import ChatHistory from "./ChatHistory";
 
-export default function Sidebar({ onNewAnalysis }) {
+export default function Sidebar({ 
+  onNewAnalysis,
+  activeThreadId,
+  onSelectConversation,
+  historyRefreshKey,
+  }) {
   return (
     <aside className="sidebar">
       <div className="brand">
@@ -16,7 +22,13 @@ export default function Sidebar({ onNewAnalysis }) {
         New Analysis
       </button>
 
-      <div className="sidebar-section">
+      <ChatHistory
+        activeThreadId={activeThreadId}
+        onSelectConversation={onSelectConversation}
+        refreshKey={historyRefreshKey}
+      />
+
+      {/* <div className="sidebar-section">
         <p className="sidebar-label">RECENT ANALYSIS</p>
         <div className="history-item active">Platinum Customers</div>
         <div className="history-item">Sales Analysis</div>
@@ -28,7 +40,7 @@ export default function Sidebar({ onNewAnalysis }) {
         <div className="capability-item"><span>LangGraph</span><span>Orchestration</span></div>
         <div className="capability-item"><span>MCP</span><span>Tools</span></div>
         <div className="capability-item"><span>RAG</span><span>Knowledge</span></div>
-      </div>
+      </div> */}
 
       <div className="sidebar-footer">
         <div className="system-status"><span className="status-dot" /> Systems Online</div>

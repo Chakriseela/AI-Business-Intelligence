@@ -40,16 +40,29 @@ export default function App() {
     rag_agent: "waiting",
     response_agent: "waiting",
   });
+  const [threadId, setThreadId] = useState(() => crypto.randomUUID());
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
 
   const modelName = MODEL_CONFIG[modelProvider];
 
   useEffect(() => () => socketRef.current?.close(), []);
 
   const resetWorkflow = () => {
-    setRoute(null); setSql(null); setMcpTool(null); setDatabaseRows(0); setDatabaseData([]);
-    setRagSources([]); setRagContext(""); setAnswer(""); setLogs([]);
+    setRoute(null); 
+    setSql(null); 
+    setMcpTool(null); 
+    setDatabaseRows(0); 
+    setDatabaseData([]);
+    setRagSources([]); 
+    setRagContext(""); 
+    setAnswer(""); 
+    setLogs([]);
     setAgentStatus({ orchestrator: "waiting", sql_agent: "waiting", rag_agent: "waiting", response_agent: "waiting" });
   };
+
+  // ========================================================
+  // WebSocket Communication
+  // =========================================================
 
   const askQuestion = () => {
     if (!question.trim() || loading) return;
@@ -61,7 +74,8 @@ export default function App() {
 
     socket.onopen = () => socket.send(
       JSON.stringify(
-        { question: question.trim(), 
+        { thread_id: threadId,
+          question: question.trim(), 
           model_provider: modelProvider, 
           model_name: modelName 
         }));
@@ -127,6 +141,8 @@ export default function App() {
           ) {
             setAnswer(String(data.answer));
           }
+          
+          setHistoryRefreshKey((prev) => prev + 1);
 
           // // SQL
           // if ("sql" in data) {
@@ -172,9 +188,61 @@ export default function App() {
     socket.onclose = () => setLoading(false);
   };
 
+
+  // =========================================================
+  // Conversation History Management
+  // =========================================================
+
+  const openConversation = async (selectedThreadId) => {
+    if (loading) {
+      socketRef.current?.close();
+      setLoading(false);
+    }
+
+    setThreadId(selectedThreadId);
+    setQuestion("");
+    resetWorkflow();
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/chat/history/${encodeURIComponent(
+          selectedThreadId
+        )}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to load conversation history");
+      }
+
+      const data = await response.json();
+      const history = data.history ?? [];
+      const lastTurn = history[history.length - 1];
+
+      if (lastTurn) {
+        setQuestion(lastTurn.question ?? "");
+        setAnswer(lastTurn.answer ?? "");
+        setRoute(lastTurn.route ?? null);
+      }
+    } catch (error) {
+      console.error("Could not load conversation:", error);
+    }
+  };
+
   return (
     <div className="app">
-      <Sidebar onNewAnalysis={() => { socketRef.current?.close(); setQuestion(""); resetWorkflow(); setLoading(false); }} />
+      <Sidebar 
+        onNewAnalysis={() => { 
+          socketRef.current?.close();
+          setThreadId(crypto.randomUUID());
+          setQuestion(""); 
+          resetWorkflow(); 
+          setLoading(false); }} 
+          activeThreadId={threadId}
+          onSelectConversation={openConversation}
+          historyRefreshKey={historyRefreshKey}
+      />
+
+      
       <main className="main">
 
         <TopBar />

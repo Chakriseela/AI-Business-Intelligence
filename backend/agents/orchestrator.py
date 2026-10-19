@@ -44,6 +44,8 @@ class AgentState(TypedDict, total=False):
  
     final_answer: str
     logs: list[str]
+
+    conversation_history: list[dict]    
  
  
 # =========================================================
@@ -359,11 +361,24 @@ def response_agent_node(state: AgentState) -> dict:
     logs.append(
         "Response Agent completed"
     )
- 
+
+    history = state.get("conversation_history", [])
+
+    updated_history = [
+        *history,
+        {
+            "question": state["question"],
+            "answer": answer,
+            "route": state.get("route"),
+        },
+    ]
+
     return {
         "final_answer": answer,
         "logs": logs,
+        "conversation_history": updated_history,
     }
+ 
  
  
 # =========================================================
@@ -519,7 +534,13 @@ builder.add_edge(
 # COMPILE
 # =========================================================
  
-graph = builder.compile()
+# graph = builder.compile()
+# =========================================================
+# COMPILE
+# =========================================================
+
+def compile_graph(checkpointer=None):
+    return builder.compile(checkpointer=checkpointer)
  
  
 # =========================================================
