@@ -55,6 +55,7 @@ The console should show the most relevant chunks and the source PDF/page metadat
 ```
 pip install arize-phoenix openinference-instrumentation openinference-instrumentation-langchain
 pip install -U "psycopg[binary,pool]" langgraph-checkpoint-postgres
+python -m pip install "mcp<2"
 
 
 
@@ -80,6 +81,14 @@ npm install @xyflow/react lucide-react react-markdown
 
 The App.jsx uses the existing ws://127.0.0.1:8000/ws/chat endpoint and sends question, model_provider, and model_name.
 
+
+# TESTING MCP
+```
+python -m backend.mcp_server.server
+python -m backend.mcp_server.client
+pip install fastmcp
+pip install "mcp<2"
+```
 
 
 

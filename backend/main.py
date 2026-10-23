@@ -203,7 +203,7 @@ def chat(request: ChatRequest):
             detail=str(exc),
 
         ) from exc
- 
+
 
 @app.get("/chat/history/{thread_id}")
 async def get_chat_history(thread_id: str):
@@ -224,7 +224,6 @@ async def get_chat_history(thread_id: str):
         ),
     }
 
-from fastapi import HTTPException
 
 
 @app.get("/chat/conversations")
@@ -309,9 +308,12 @@ async def websocket_chat(websocket: WebSocket,):
             import uuid 
 
             # thread_id = str(request.get("thread_id") or uuid.uuid4())
-            thread_id = "Chakri_111"
+            # thread_id = "Chakri_111"
 
-            thread_id = str(request.get("thread_id") or uuid.uuid4())
+            thread_id = str(
+                request.get(
+                    "thread_id"
+                    ) or uuid.uuid4())
 
             config = {
                 "configurable": {

@@ -11,11 +11,12 @@ import RAGInspector from "./components/RAGInspector";
 import ExecutionTimeline from "./components/ExecutionTimeline";
 import RAGContext from "./components/RAGContext";
 import FinalAnswer from "./components/FinalAnswer";
+import ConversationHistory from "./components/ConversationHistory";
 
 import "./index.css";
 
 const MODEL_CONFIG = {
-  gemini: "gemini-3.6-flash",
+  gemini: "gemini-3.5-flash-lite",
   ollama: "qwen3.5",
 };
 
@@ -42,6 +43,7 @@ export default function App() {
   });
   const [threadId, setThreadId] = useState(() => crypto.randomUUID());
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+  const [messages, setMessages] = useState([]);
 
   const modelName = MODEL_CONFIG[modelProvider];
 
@@ -57,6 +59,7 @@ export default function App() {
     setRagContext(""); 
     setAnswer(""); 
     setLogs([]);
+    setMessages([]);
     setAgentStatus({ orchestrator: "waiting", sql_agent: "waiting", rag_agent: "waiting", response_agent: "waiting" });
   };
 
@@ -65,7 +68,10 @@ export default function App() {
   // =========================================================
 
   const askQuestion = () => {
-    if (!question.trim() || loading) return;
+    
+    const submittedQuestion = question.trim();
+
+    if (!submittedQuestion || loading) return;
     socketRef.current?.close();
     resetWorkflow(); setLoading(true);
 
@@ -75,7 +81,7 @@ export default function App() {
     socket.onopen = () => socket.send(
       JSON.stringify(
         { thread_id: threadId,
-          question: question.trim(), 
+          question: submittedQuestion, 
           model_provider: modelProvider, 
           model_name: modelName 
         }));
@@ -134,13 +140,25 @@ export default function App() {
           // }
 
           // Final answer
-          if (
-            data.answer !== undefined &&
-            data.answer !== null &&
-            String(data.answer).trim()
-          ) {
-            setAnswer(String(data.answer));
+          const finalAnswer =
+            data.answer !== undefined && data.answer !== null
+              ? String(data.answer)
+              : "";
+
+          if (finalAnswer.trim()) {
+            setAnswer(finalAnswer);
+
+            setMessages((previous) => [
+              ...previous,
+              {
+                id: crypto.randomUUID(),
+                question: submittedQuestion,
+                answer: finalAnswer,
+                route: data.route ?? route
+              }
+            ]);
           }
+
           
           setHistoryRefreshKey((prev) => prev + 1);
 
@@ -202,6 +220,8 @@ export default function App() {
     setThreadId(selectedThreadId);
     setQuestion("");
     resetWorkflow();
+    setMessages([]);
+
 
     try {
       const response = await fetch(
@@ -215,14 +235,19 @@ export default function App() {
       }
 
       const data = await response.json();
-      const history = data.history ?? [];
-      const lastTurn = history[history.length - 1];
+      // const history = data.history ?? [];
+      // const lastTurn = history[history.length - 1];
 
-      if (lastTurn) {
-        setQuestion(lastTurn.question ?? "");
-        setAnswer(lastTurn.answer ?? "");
-        setRoute(lastTurn.route ?? null);
-      }
+      // if (lastTurn) {
+      //   setQuestion(lastTurn.question ?? "");
+      //   setAnswer(lastTurn.answer ?? "");
+      //   setRoute(lastTurn.route ?? null);
+      // }
+
+      setMessages(
+        Array.isArray(data.history) ? data.history : []
+      );
+
     } catch (error) {
       console.error("Could not load conversation:", error);
     }
@@ -246,6 +271,10 @@ export default function App() {
       <main className="main">
 
         <TopBar />
+        <ConversationHistory
+          messages={messages}
+          loading={loading}
+        />
         <QuestionPanel
           question={question}
           setQuestion={setQuestion}

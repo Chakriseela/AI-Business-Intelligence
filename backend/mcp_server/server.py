@@ -143,4 +143,6 @@ def execute_readonly_sql(query: str) -> dict:
 # ---------------------------------------------------------
 
 if __name__ == "__main__":
-    mcp.run(transport="studio")
+    # python -m pip install "mcp<2"
+    # mcp.run(transport="studio")
+    mcp.run(transport="stdio")

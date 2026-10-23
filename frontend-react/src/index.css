@@ -46,7 +46,6 @@ textarea {
  min-height: 100vh;
  padding: 24px 18px; border-right: 1px solid #1b2230; background: #0b0f17; display: flex;
  flex-direction: column;
- position: fixed;
 
 }
 .brand {
@@ -115,12 +114,12 @@ textarea {
 
 }
 /* =========================================================
-  MAIN
+                            MAIN
   ========================================================= */
 .main {
  flex: 1;
  max-width: 1500px; margin: 0 auto; padding: 34px 42px 60px;
-
+ position: fixed; top: 0; left: 260px; right: 0; bottom: 0; overflow-y: auto;
 }
 .topbar {
  display: flex;
@@ -612,6 +611,11 @@ textarea::placeholder {
 }
 
 
+/*==========================================================
+  Chat History
+  ========================================================= 
+*/
+
 .chat-history { margin-top: 24px; width: 100%;
 }
 
@@ -649,4 +653,159 @@ textarea::placeholder {
 }
 
 .chat-history-error { color: #fca5a5; font-size: 12px; overflow-wrap: anywhere;
+}
+
+
+
+
+/* ========================================================
+   Conversation History
+   ======================================================== */
+
+.conversation-history {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+/* Empty conversation */
+.conversation-history.empty {
+  min-height: 180px;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+
+/* Each question-answer pair */
+.conversation-turn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Shared message layout */
+.conversation-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: fit-content;
+  max-width: 85%;
+}
+
+/* 
+   User Message — RIGHT SIDE
+    */
+
+.user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.user-message .conversation-message-content {
+  text-align: right;
+}
+
+/* 
+   BizInsight AI Message — LEFT SIDE
+    */
+
+.assistant-message {
+  align-self: flex-start;
+  flex-direction: row;
+}
+
+.assistant-message .conversation-message-content {
+  text-align: left;
+}
+
+/* 
+   Avatars
+    */
+
+.conversation-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+
+.user-avatar {
+  background: #334155;
+  color: #ffffff;
+}
+
+.assistant-avatar {
+  background: #176b52;
+  color: #ffffff;
+}
+
+/* 
+   Message Content
+    */
+
+.conversation-message-content {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.conversation-message-content strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.conversation-message-content p {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.conversation-answer {
+  color: var(--text-color, inherit);
+}
+
+/* 
+   Loading Indicator
+    */
+
+.conversation-loading-icon {
+  display: inline-block;
+  vertical-align: middle;
+  animation: conversation-spin 1s linear infinite;
+}
+
+@keyframes conversation-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 
+   Responsive Layout
+    */
+
+@media (max-width: 768px) {
+  .conversation-history {
+    padding: 16px;
+    gap: 20px;
+  }
+
+  .conversation-message {
+    max-width: 95%;
+  }
+
+  .conversation-avatar {
+    width: 32px;
+    height: 32px;
+  }
 }
